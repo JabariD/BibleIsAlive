@@ -1,7 +1,31 @@
 import React from "react";
-import { StyleSheet, Text, SafeAreaView } from "react-native";
+import { StyleSheet, Text, SafeAreaView, Image } from "react-native";
 
 export type Props = {};
+
+// Returns the user's current badges.
+// Note: Hardcoded for now.
+const getBadges = () => {
+  // Get badges from backend.
+  // Return badges.
+  return [
+    <Image
+      key="a"
+      source={require("../assets/badges/sword.png")}
+      style={styleBadges.badgeImage}
+    />,
+    <Image
+      key="b"
+      source={require("../assets/badges/sword.png")}
+      style={styleBadges.badgeImage}
+    />,
+    <Image
+      key="c"
+      source={require("../assets/badges/sword.png")}
+      style={styleBadges.badgeImage}
+    />,
+  ];
+};
 
 const HomeScreen: React.FC<Props> = () => {
   return (
@@ -13,8 +37,10 @@ const HomeScreen: React.FC<Props> = () => {
       </SafeAreaView>
 
       {/* Badges */}
-      <SafeAreaView style={styleBadges.container}>
+      <SafeAreaView>
         <Text style={styleBadges.header}>Badges</Text>
+        {/* Rows and columns of badges in grid format. */}
+        <SafeAreaView style={styleBadges.badgeContainer}>{getBadges().map((badge) => badge)}</SafeAreaView>
       </SafeAreaView>
 
       {/* Pinned */}
@@ -42,8 +68,10 @@ const HomeScreen: React.FC<Props> = () => {
 
 const styleHomeScreen = StyleSheet.create({
   container: {
+    display: "flex",
     margin: 25,
-  }
+    rowGap: 20,
+  },
 });
 
 const styleWelcomeHeader = StyleSheet.create({
@@ -57,13 +85,21 @@ const styleWelcomeHeader = StyleSheet.create({
 });
 
 const styleBadges = StyleSheet.create({
-  container: {
-    margin: 15,
+  badgeContainer: {
+    display: "flex",
+    flexDirection: "row",
+    columnGap: 5,
+    marginTop: 10,
   },
 
   header: {
-    fontSize: 30,
+    fontSize: 25,
     fontWeight: "bold",
+  },
+
+  badgeImage: {
+    height: 30,
+    width: 30,
   },
 });
 
