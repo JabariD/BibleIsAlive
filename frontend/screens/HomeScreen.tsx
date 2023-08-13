@@ -5,10 +5,10 @@ export type Props = {};
 
 const HomeScreen: React.FC<Props> = () => {
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styleHomeScreen.container}>
       {/* Welcome Header */}
-      <SafeAreaView style={styleWelcomeHeader.container}>
-        <Text>Welcome Back</Text>
+      <SafeAreaView>
+        <Text style={styleWelcomeHeader.welcomeBack}>Welcome Back,</Text>
         <Text style={styleWelcomeHeader.name}>Payton</Text>
       </SafeAreaView>
 
@@ -40,11 +40,16 @@ const HomeScreen: React.FC<Props> = () => {
   );
 };
 
-const styleWelcomeHeader = StyleSheet.create({
+const styleHomeScreen = StyleSheet.create({
   container: {
-    marginLeft: 20,
-  },
+    margin: 25,
+  }
+});
 
+const styleWelcomeHeader = StyleSheet.create({
+  welcomeBack: {
+    fontSize: 20,
+  },
   name: {
     fontSize: 40,
     fontWeight: "bold",
