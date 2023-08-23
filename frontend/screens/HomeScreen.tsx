@@ -46,6 +46,7 @@ const fetchUserHighlights = () => {
 
 }
 
+// Home screen component for the user. Lists badges, prayers, notes, and highlights. Serves as main hub for the user.
 export type Props = {};
 
 const HomeScreen: React.FC<Props> = () => {
