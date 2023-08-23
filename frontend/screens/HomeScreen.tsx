@@ -1,11 +1,12 @@
 import React from "react";
 import { StyleSheet, Text, SafeAreaView, Image } from "react-native";
+import { Button } from "react-native-elements";
 
-export type Props = {};
+import HomeCardComponent from "../components/HomeCardComponent";
 
 // Returns the user's current badges.
 // Note: Hardcoded for now.
-const getBadges = () => {
+const fetchBadges = () => {
   // Get badges from backend.
   // Return badges.
   return [
@@ -27,6 +28,26 @@ const getBadges = () => {
   ];
 };
 
+// Returns the user's current prayers.
+// Note: Hardcoded for now.
+const fetchUserPrayers = () => {
+  return [<HomeCardComponent key="123"/>];
+};
+
+// Returns the user's current notes.
+// Note: Hardcoded for now.
+const fetchUserNotes = () => {
+
+}
+
+// Returns the user's current highlights.
+// Note: Hardcoded for now.
+const fetchUserHighlights = () => {
+
+}
+
+export type Props = {};
+
 const HomeScreen: React.FC<Props> = () => {
   return (
     <SafeAreaView style={styleHomeScreen.container}>
@@ -36,36 +57,41 @@ const HomeScreen: React.FC<Props> = () => {
         <Text style={styleWelcomeHeader.name}>Payton</Text>
       </SafeAreaView>
 
+      <Text>Maybe add quick actions here?</Text>
+
       {/* Badges */}
       <SafeAreaView>
         <Text style={styleBadges.header}>Badges</Text>
         {/* Rows and columns of badges in grid format. */}
-        <SafeAreaView style={styleBadges.badgeContainer}>{getBadges().map((badge) => badge)}</SafeAreaView>
-      </SafeAreaView>
-
-      {/* Pinned */}
-      <SafeAreaView>
-        <Text>Pinned</Text>
+        <SafeAreaView style={styleBadges.badgeContainer}>
+          {fetchBadges().map((badge) => badge)}
+        </SafeAreaView>
       </SafeAreaView>
 
       {/* Prayer card */}
       <SafeAreaView>
-        <Text>Scrolling inside prayer card (not a scrollview)</Text>
+        <SafeAreaView style={stylePrayers.headerContainer}>
+          <Text style={stylePrayers.header}>Recent Prayers</Text>
+          <Text style={stylePrayers.seeAll}>See all</Text>
+        </SafeAreaView>
+        {/* List top 3 recent prayers */}
+        {fetchUserPrayers().map((prayer) => prayer)}
       </SafeAreaView>
 
       {/* Notes */}
       <SafeAreaView>
-        <Text>Notes</Text>
+        <Text style={styleNotes.header}>Notes</Text>
       </SafeAreaView>
 
       {/* Highlights */}
       <SafeAreaView>
-        <Text>Highlights</Text>
+        <Text style={styleHighlights.header}>Highlights</Text>
       </SafeAreaView>
     </SafeAreaView>
   );
 };
 
+/** Styles */
 const styleHomeScreen = StyleSheet.create({
   container: {
     display: "flex",
@@ -101,6 +127,24 @@ const styleBadges = StyleSheet.create({
     height: 30,
     width: 30,
   },
+});
+
+const stylePrayers = StyleSheet.create({
+  headerContainer: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  header: { fontSize: 25, fontWeight: "bold" },
+  seeAll: { fontSize: 20, color: "grey" },
+});
+
+const styleNotes = StyleSheet.create({
+  header: {fontSize: 25, fontWeight: "bold"},
+});
+
+const styleHighlights = StyleSheet.create({
+  header: {fontSize: 25, fontWeight: "bold"},
 });
 
 export default HomeScreen;
