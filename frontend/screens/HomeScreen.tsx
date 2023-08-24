@@ -82,11 +82,13 @@ const HomeScreen: React.FC<Props> = () => {
       {/* Notes */}
       <SafeAreaView>
         <Text style={styleNotes.header}>Notes</Text>
+        <HomeCardComponent key="123" useImage={false} title={"Note #1"} subTitle={"God is my savior."}/>
       </SafeAreaView>
 
       {/* Highlights */}
       <SafeAreaView>
         <Text style={styleHighlights.header}>Highlights</Text>
+        <HomeCardComponent key="123" useImage={false} title={"Romans 12:1-2"} subTitle={"Present your body as a..."}/>
       </SafeAreaView>
     </SafeAreaView>
   );
