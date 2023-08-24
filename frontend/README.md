@@ -3,6 +3,8 @@
 
 ## Developer Notes
 
+The frontend is developed using React Native https://reactnative.dev/docs/getting-started and TypeScript.
+
 Run the command `npx create-expo-app christian-app` for the initial creation of the app!
 
 To run your app: 
