@@ -53,6 +53,8 @@ const styleHomeCardComponent = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "nowrap",
 
+    maxHeight: 75, // limit height of card component so that we do not dynamically resize if more content
+
     padding: 20,
     marginTop: 10,
 
