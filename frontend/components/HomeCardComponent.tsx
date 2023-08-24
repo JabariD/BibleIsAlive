@@ -54,6 +54,7 @@ const styleHomeCardComponent = StyleSheet.create({
     flexWrap: "nowrap",
 
     maxHeight: 75, // limit height of card component so that we do not dynamically resize if more content
+    overflow: "hidden", // hide overflow if more content
 
     padding: 20,
     marginTop: 10,
