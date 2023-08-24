@@ -31,7 +31,7 @@ const fetchBadges = () => {
 // Returns the user's current prayers.
 // Note: Hardcoded for now.
 const fetchUserPrayers = () => {
-  return [<HomeCardComponent key="123"/>];
+  return [<HomeCardComponent key="123" useImage={true} title={"This is a title."} subTitle={"This is a subtitle."}/>];
 };
 
 // Returns the user's current notes.

@@ -2,12 +2,25 @@ import React from "react";
 import { StyleSheet, Text, SafeAreaView, Image } from "react-native";
 
 // Card component used on the user's homepage. Reusable and can hold multiple types of information. E.g. prayers, notes, etc.
-export type Props = {};
+export type Props = {
+  // if true, shows image in card component. If false, image is hidden.
+  // required
+  useImage: boolean; 
 
-const HomeCardComponent: React.FC<Props> = () => {
+  // title of card component.
+  // required
+  title: string;
+
+  // subtitle of card component.
+  // required
+  subTitle: string;
+};
+
+const HomeCardComponent: React.FC<Props> = (props) => {
   return (
     <SafeAreaView style={styleHomeCardComponent.container}>
-        {/* Image */}
+      {/* Dynamically show image if useImage prompt is on. */}
+      {props.useImage ? (
         <SafeAreaView style={styleHomeCardComponent.imageContainer}>
           <Image
             key="a"
@@ -15,14 +28,17 @@ const HomeCardComponent: React.FC<Props> = () => {
             style={styleHomeCardComponent.image}
           />
         </SafeAreaView>
-
-        {/* Title / Given user name */}
-        <SafeAreaView style={styleHomeCardComponent.titlesContainer}>
-          <Text style={styleHomeCardComponent.title}>Lorem ipsum, d...</Text>
-          <Text style={styleHomeCardComponent.subTitle}>Lorem ipsum dolor.</Text>
-        </SafeAreaView>
-
+      ) : (
         <SafeAreaView></SafeAreaView>
+      )}
+
+      {/* Title / Given user name */}
+      <SafeAreaView style={styleHomeCardComponent.titlesContainer}>
+        <Text style={styleHomeCardComponent.title}>{props.title}</Text>
+        <Text style={styleHomeCardComponent.subTitle}>{props.subTitle}</Text>
+      </SafeAreaView>
+
+      <SafeAreaView></SafeAreaView>
       {/* Relative date created */}
       <SafeAreaView style={styleHomeCardComponent.relativeDateContainer}>
         <Text style={styleHomeCardComponent.relativeDateText}>1d</Text>
