@@ -1,5 +1,11 @@
 import React from "react";
-import { StyleSheet, Text, SafeAreaView, Image } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  SafeAreaView,
+  Image,
+  ScrollView,
+} from "react-native";
 import { Button } from "react-native-elements";
 
 import HomeCardComponent from "../components/HomeCardComponent";
@@ -31,20 +37,23 @@ const fetchBadges = () => {
 // Returns the user's current prayers.
 // Note: Hardcoded for now.
 const fetchUserPrayers = () => {
-  return [<HomeCardComponent key="123" useImage={true} title={"This is a title."} subTitle={"This is a subtitle."}/>];
+  return [
+    <HomeCardComponent
+      key="123"
+      useImage={true}
+      title={"This is a title."}
+      subTitle={"This is a subtitle."}
+    />,
+  ];
 };
 
 // Returns the user's current notes.
 // Note: Hardcoded for now.
-const fetchUserNotes = () => {
-
-}
+const fetchUserNotes = () => {};
 
 // Returns the user's current highlights.
 // Note: Hardcoded for now.
-const fetchUserHighlights = () => {
-
-}
+const fetchUserHighlights = () => {};
 
 // Home screen component for the user. Lists badges, prayers, notes, and highlights. Serves as main hub for the user.
 export type Props = {};
@@ -72,33 +81,45 @@ const HomeScreen: React.FC<Props> = () => {
         </SafeAreaView>
       </SafeAreaView>
 
-      {/* Prayer card */}
-      <SafeAreaView>
-        <SafeAreaView style={styleSectionHeader.headerContainer}>
-          <Text style={styleSectionHeader.header}>Recent Prayers</Text>
-          <Text style={styleSectionHeader.seeAll}>See all</Text>
+      <ScrollView>
+        {/* Prayer card */}
+        <SafeAreaView style={styleSection.container}>
+          <SafeAreaView style={styleSectionHeader.headerContainer}>
+            <Text style={styleSectionHeader.header}>Recent Prayers</Text>
+            <Text style={styleSectionHeader.seeAll}>See all</Text>
+          </SafeAreaView>
+          {/* List top 3 recent prayers */}
+          {fetchUserPrayers().map((prayer) => prayer)}
         </SafeAreaView>
-        {/* List top 3 recent prayers */}
-        {fetchUserPrayers().map((prayer) => prayer)}
-      </SafeAreaView>
 
-      {/* Notes */}
-      <SafeAreaView>
-        <SafeAreaView style={styleSectionHeader.headerContainer}>
-          <Text style={styleSectionHeader.header}>Notes</Text>
-          <Text style={styleSectionHeader.seeAll}>See all</Text>
+        {/* Notes */}
+        <SafeAreaView style={styleSection.container}>
+          <SafeAreaView style={styleSectionHeader.headerContainer}>
+            <Text style={styleSectionHeader.header}>Notes</Text>
+            <Text style={styleSectionHeader.seeAll}>See all</Text>
+          </SafeAreaView>
+          <HomeCardComponent
+            key="123"
+            useImage={false}
+            title={"Note #1"}
+            subTitle={"God is my savior."}
+          />
         </SafeAreaView>
-        <HomeCardComponent key="123" useImage={false} title={"Note #1"} subTitle={"God is my savior."}/>
-      </SafeAreaView>
 
-      {/* Highlights */}
-      <SafeAreaView>
-        <SafeAreaView style={styleSectionHeader.headerContainer}>
-          <Text style={styleSectionHeader.header}>Highlights</Text>
-          <Text style={styleSectionHeader.seeAll}>See all</Text>
+        {/* Highlights */}
+        <SafeAreaView style={styleSection.container}>
+          <SafeAreaView style={styleSectionHeader.headerContainer}>
+            <Text style={styleSectionHeader.header}>Highlights</Text>
+            <Text style={styleSectionHeader.seeAll}>See all</Text>
+          </SafeAreaView>
+          <HomeCardComponent
+            key="123"
+            useImage={false}
+            title={"Romans 12:1-2"}
+            subTitle={"Present your body as a..."}
+          />
         </SafeAreaView>
-        <HomeCardComponent key="123" useImage={false} title={"Romans 12:1-2"} subTitle={"Present your body as a..."}/>
-      </SafeAreaView>
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -139,7 +160,7 @@ const styleLevel = StyleSheet.create({
     fontSize: 20,
     margin: 10,
     fontWeight: "bold",
-  }
+  },
 });
 
 const styleBadges = StyleSheet.create({
@@ -158,6 +179,12 @@ const styleBadges = StyleSheet.create({
   badgeImage: {
     height: 30,
     width: 30,
+  },
+});
+
+const styleSection = StyleSheet.create({
+  container: {
+    marginBottom: 30,
   },
 });
 
