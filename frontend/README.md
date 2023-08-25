@@ -15,3 +15,12 @@ To run your app:
 
 To stop your app:
 1. Press `Ctrl+C`
+
+
+Going from Figma design to frontend app.
+This I found to be difficult at first but some patterns I kind of took up:
+1. Start with structure first (NO styles)
+   1. Start building outside in. (ex. when designing the section with "see all" to the right, design the outer box first, then the child elements)
+   2. Extract out repeated elements (ex. the cards can be a component)
+2. Then add styles.
+   1. Always start generic then go more complex.
