@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View, SafeAreaView } from "react-native";
+import { StyleSheet, Text, Image } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
@@ -16,7 +16,22 @@ export default function App() {
       {/* <HomeScreen /> */}
       {isSignedIn ? (
         <Tab.Navigator>
-          <Tab.Screen name="Home" component={HomeScreen}/>
+          <Tab.Screen
+            name="Home"
+            component={HomeScreen}
+            options={{
+              tabBarLabel: "Home",
+              tabBarIcon: ({ focused, color, size }) => (
+                <Image
+                  source={require("./assets/icons/home.png")}
+                  style={{
+                    width: 30,
+                    height: 30,
+                  }}
+                />
+              ),
+            }}
+          />
         </Tab.Navigator>
       ) : (
         <Text>Logged Out</Text>
