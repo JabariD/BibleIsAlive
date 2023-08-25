@@ -58,7 +58,10 @@ const HomeScreen: React.FC<Props> = () => {
         <Text style={styleWelcomeHeader.name}>Payton</Text>
       </SafeAreaView>
 
-      <Text>Maybe add quick actions here?</Text>
+      {/* Level - Quick actions? */}
+      <SafeAreaView style={styleLevel.container}>
+        <Text style={styleLevel.levelTitle}>Level: 1</Text>
+      </SafeAreaView>
 
       {/* Badges */}
       <SafeAreaView>
@@ -117,6 +120,26 @@ const styleWelcomeHeader = StyleSheet.create({
     fontSize: 40,
     fontWeight: "bold",
   },
+});
+
+const styleLevel = StyleSheet.create({
+  container: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+
+    minHeight: 120,
+
+    borderRadius: 5,
+    borderWidth: 0.5,
+    borderColor: "grey",
+  },
+
+  levelTitle: {
+    fontSize: 20,
+    margin: 10,
+    fontWeight: "bold",
+  }
 });
 
 const styleBadges = StyleSheet.create({
