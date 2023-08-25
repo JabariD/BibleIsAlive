@@ -71,9 +71,9 @@ const HomeScreen: React.FC<Props> = () => {
 
       {/* Prayer card */}
       <SafeAreaView>
-        <SafeAreaView style={stylePrayers.headerContainer}>
-          <Text style={stylePrayers.header}>Recent Prayers</Text>
-          <Text style={stylePrayers.seeAll}>See all</Text>
+        <SafeAreaView style={styleSectionHeader.headerContainer}>
+          <Text style={styleSectionHeader.header}>Recent Prayers</Text>
+          <Text style={styleSectionHeader.seeAll}>See all</Text>
         </SafeAreaView>
         {/* List top 3 recent prayers */}
         {fetchUserPrayers().map((prayer) => prayer)}
@@ -81,13 +81,19 @@ const HomeScreen: React.FC<Props> = () => {
 
       {/* Notes */}
       <SafeAreaView>
-        <Text style={styleNotes.header}>Notes</Text>
+        <SafeAreaView style={styleSectionHeader.headerContainer}>
+          <Text style={styleSectionHeader.header}>Notes</Text>
+          <Text style={styleSectionHeader.seeAll}>See all</Text>
+        </SafeAreaView>
         <HomeCardComponent key="123" useImage={false} title={"Note #1"} subTitle={"God is my savior."}/>
       </SafeAreaView>
 
       {/* Highlights */}
       <SafeAreaView>
-        <Text style={styleHighlights.header}>Highlights</Text>
+        <SafeAreaView style={styleSectionHeader.headerContainer}>
+          <Text style={styleSectionHeader.header}>Highlights</Text>
+          <Text style={styleSectionHeader.seeAll}>See all</Text>
+        </SafeAreaView>
         <HomeCardComponent key="123" useImage={false} title={"Romans 12:1-2"} subTitle={"Present your body as a..."}/>
       </SafeAreaView>
     </SafeAreaView>
@@ -132,22 +138,22 @@ const styleBadges = StyleSheet.create({
   },
 });
 
-const stylePrayers = StyleSheet.create({
+const styleSectionHeader = StyleSheet.create({
   headerContainer: {
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
   },
-  header: { fontSize: 25, fontWeight: "bold" },
-  seeAll: { fontSize: 20, color: "grey" },
-});
 
-const styleNotes = StyleSheet.create({
-  header: {fontSize: 25, fontWeight: "bold"},
-});
+  header: {
+    fontSize: 25,
+    fontWeight: "bold",
+  },
 
-const styleHighlights = StyleSheet.create({
-  header: {fontSize: 25, fontWeight: "bold"},
+  seeAll: {
+    fontSize: 20,
+    color: "grey",
+  },
 });
 
 export default HomeScreen;
