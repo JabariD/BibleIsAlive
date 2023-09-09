@@ -5,6 +5,7 @@ import {
   SafeAreaView,
   Image,
   ScrollView,
+  View,
 } from "react-native";
 import { Button } from "react-native-elements";
 
@@ -70,6 +71,10 @@ const HomeScreen: React.FC<Props> = () => {
       {/* Level - Quick actions? */}
       <SafeAreaView style={styleLevel.container}>
         <Text style={styleLevel.levelTitle}>Level: 1</Text>
+        <Text style={styleLevel.levelSubTitle}>Add more experiences to mature!</Text>
+        {/* Progress bar */}
+        <SafeAreaView style={styleLevel.progressBar}><SafeAreaView></SafeAreaView></SafeAreaView>
+        <Text style={styleLevel.rewardText}>Level 2 Reward: NEW BADGE!</Text>
       </SafeAreaView>
 
       {/* Badges */}
@@ -146,8 +151,9 @@ const styleWelcomeHeader = StyleSheet.create({
 const styleLevel = StyleSheet.create({
   container: {
     display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
+    flexDirection: "column",
+    justifyContent: "flex-start",
+    // alignItems: "center",
 
     minHeight: 120,
 
@@ -159,7 +165,31 @@ const styleLevel = StyleSheet.create({
   levelTitle: {
     fontSize: 20,
     margin: 10,
+    marginBottom: 5,
     fontWeight: "bold",
+  },
+
+  levelSubTitle: {
+    marginLeft: 10,
+    marginBottom: 5,
+    fontSize: 15,
+    color: "grey",
+  },
+
+  rewardText: {
+    marginLeft: 10,
+    marginTop: 10,
+    fontSize: 12,
+    color: "grey",
+  },
+
+  progressBar: {
+    marginLeft: 10,
+
+    width: "80%",
+    height: 25,
+    borderRadius: 10,
+    backgroundColor: "grey",
   },
 });
 
