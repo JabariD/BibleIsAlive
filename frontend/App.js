@@ -125,7 +125,7 @@ const stylesHeader = StyleSheet.create({
     flexDirection: "row",
 
     backgroundColor: theme.colors.primary,
-    height: 100,
+    height: 105,
   },
 
   text: {
