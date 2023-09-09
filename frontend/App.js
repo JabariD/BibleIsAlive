@@ -3,7 +3,9 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { theme } from "./utils/theme";
 
+// Screens
 import HomeScreen from "./screens/HomeScreen";
+import BibleScreen from "./screens/BibleScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -45,9 +47,9 @@ export default function App() {
     <NavigationContainer>
       {/* Make StatusBar white. */}
       <StatusBar barStyle="light-content" />
-      {/* <HomeScreen /> */}
       {isSignedIn ? (
         <Tab.Navigator>
+          {/* HomeScreen */}
           <Tab.Screen
             name="Home"
             component={HomeScreen}
@@ -60,6 +62,27 @@ export default function App() {
               tabBarIcon: ({ focused, color, size }) => (
                 <Image
                   source={require("./assets/icons/home.png")}
+                  style={{
+                    width: 30,
+                    height: 30,
+                  }}
+                />
+              ),
+            }}
+          />
+          {/* BibleScreen */}
+           <Tab.Screen
+            name="Bible"
+            component={BibleScreen}
+            options={{
+              // Header bar
+              header: (props) => <HeaderBar {...props} />,
+              // Label of tab icon
+              tabBarLabel: "Bible",
+              // Image of icon
+              tabBarIcon: ({ focused, color, size }) => (
+                <Image
+                  source={require("./assets/icons/bible.png")}
                   style={{
                     width: 30,
                     height: 30,
