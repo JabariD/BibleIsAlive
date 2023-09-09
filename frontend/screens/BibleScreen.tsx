@@ -13,6 +13,17 @@ const BibleScreen: React.FC<Props> = () => {
   return (
     <SafeAreaView>
       <Text>Welcome to the Bible Screen!</Text>
+      {/* Continue Reading */}
+      <SafeAreaView></SafeAreaView>
+
+      {/* Passages of the Day */}
+      <SafeAreaView></SafeAreaView>
+
+      {/* Trending verses*/}
+      <SafeAreaView></SafeAreaView>
+
+      {/* Featured sermons from church */}
+      <SafeAreaView></SafeAreaView>
     </SafeAreaView>
   );
 };
