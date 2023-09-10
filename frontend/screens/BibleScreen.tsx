@@ -1,5 +1,11 @@
 import React from "react";
-import { SafeAreaView, Text, Image, StyleSheet } from "react-native";
+import {
+  SafeAreaView,
+  Text,
+  Image,
+  StyleSheet,
+  ScrollView,
+} from "react-native";
 
 export type Props = {};
 
@@ -17,7 +23,7 @@ const BibleScreen: React.FC<Props> = () => {
         {/* Row */}
         <SafeAreaView style={continueReadingStyles.header}>
           <Text style={sharedStyles.text}>Continue Reading</Text>
-          <Text style={sharedStyles.subText}>New reading</Text>
+          <Text style={sharedStyles.subText}>Start fresh...</Text>
         </SafeAreaView>
 
         {/* Image */}
@@ -50,15 +56,22 @@ const BibleScreen: React.FC<Props> = () => {
           <Text style={sharedStyles.subText}>See all</Text>
         </SafeAreaView>
         {/* Map each verse this. */}
-        <SafeAreaView style={trendingVersesStyles.trendingVerseContainer}>
-          <TrendingVerse verse="Bible Verse 1" />
-          <TrendingVerse verse="Bible Verse 2" />
-          <TrendingVerse verse="Bible Verse 3" />
-        </SafeAreaView>
+        <ScrollView horizontal={true}>
+          <SafeAreaView style={trendingVersesStyles.trendingVerseContainer}>
+            <TrendingVerse verse="Bible Verse 1" />
+            <TrendingVerse verse="Bible Verse 2" />
+            <TrendingVerse verse="Bible Verse 3" />
+            <TrendingVerse verse="Bible Verse 4" />
+          </SafeAreaView>
+        </ScrollView>
       </SafeAreaView>
 
       {/* Recommended post*/}
-      <SafeAreaView></SafeAreaView>
+      <SafeAreaView style={recommendedPostStyle.container}>
+        <Text style={sharedStyles.text}>Posts You Might Find Interesting</Text>
+        <Text style={sharedStyles.subText}>John 3:16</Text>
+        <Text>context of verse?</Text>
+      </SafeAreaView>
 
       {/* Featured sermons from church */}
       <SafeAreaView></SafeAreaView>
@@ -116,6 +129,7 @@ const trendingVersesStyles = StyleSheet.create({
   container: {
     display: "flex",
     flexDirection: "column",
+    marginBottom: 30,
   },
 
   header: {
@@ -130,6 +144,17 @@ const trendingVersesStyles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     gap: 20,
+  },
+});
+
+const recommendedPostStyle = StyleSheet.create({
+  container: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    gap: 3,
+
+    marginBottom: 30,
   },
 });
 
