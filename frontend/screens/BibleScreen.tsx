@@ -23,19 +23,41 @@ const BibleScreen: React.FC<Props> = () => {
         {/* Image */}
         <Image
           source={require("../assets/images/cross.jpg")}
-          style={{ height: 200, width: "100%", borderRadius: 15, marginBottom: 10, resizeMode: "cover" }}
+          style={{
+            height: 200,
+            width: "100%",
+            borderRadius: 15,
+            marginBottom: 10,
+            resizeMode: "cover",
+          }}
         />
 
         {/* Text */}
-        <Text style={continueReadingStyles.verseText}>Bible text. Love the lord your God...</Text>
+        <Text style={continueReadingStyles.verseText}>
+          Bible text. Love the lord your God...
+        </Text>
         {/* Translation */}
-        <Text style={continueReadingStyles.verseTranslation}>The King James Bible</Text>
+        <Text style={continueReadingStyles.verseTranslation}>
+          The King James Bible
+        </Text>
       </SafeAreaView>
 
-      {/* Passages of the Day */}
-      <SafeAreaView></SafeAreaView>
+      {/* Trending Verses section */}
+      <SafeAreaView style={trendingVersesStyles.container}>
+        {/* Header */}
+        <SafeAreaView style={trendingVersesStyles.header}>
+          <Text style={sharedStyles.text}>Trending Verses</Text>
+          <Text style={sharedStyles.subText}>See all</Text>
+        </SafeAreaView>
+        {/* Map each verse this. */}
+        <SafeAreaView style={trendingVersesStyles.trendingVerseContainer}>
+          <TrendingVerse verse="Bible Verse 1" />
+          <TrendingVerse verse="Bible Verse 2" />
+          <TrendingVerse verse="Bible Verse 3" />
+        </SafeAreaView>
+      </SafeAreaView>
 
-      {/* Trending verses*/}
+      {/* Recommended post*/}
       <SafeAreaView></SafeAreaView>
 
       {/* Featured sermons from church */}
@@ -44,6 +66,7 @@ const BibleScreen: React.FC<Props> = () => {
   );
 };
 
+// Styles
 const screenStyles = StyleSheet.create({
   container: {
     margin: 20,
@@ -66,6 +89,7 @@ const continueReadingStyles = StyleSheet.create({
   container: {
     display: "flex",
     flexDirection: "column",
+    marginBottom: 30,
   },
 
   header: {
@@ -85,6 +109,74 @@ const continueReadingStyles = StyleSheet.create({
 
   verseTranslation: {
     fontSize: 12,
+  },
+});
+
+const trendingVersesStyles = StyleSheet.create({
+  container: {
+    display: "flex",
+    flexDirection: "column",
+  },
+
+  header: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 10,
+  },
+
+  trendingVerseContainer: {
+    display: "flex",
+    flexDirection: "row",
+    gap: 20,
+  },
+});
+
+/**
+ * Reusable Trending Verse component
+ */
+type TrendingVerseProps = {
+  verse: string;
+};
+const TrendingVerse: React.FC<TrendingVerseProps> = (props) => {
+  return (
+    <SafeAreaView style={reusableTrendingVerseComponentStyles.container}>
+      <Image
+        source={require("../assets/images/trending-verse.jpg")}
+        style={{
+          height: 100,
+          width: 110,
+          borderRadius: 15,
+          marginBottom: 10,
+          resizeMode: "cover",
+        }}
+      />
+      <Text style={reusableTrendingVerseComponentStyles.verseName}>
+        Example Name
+      </Text>
+      <Text style={reusableTrendingVerseComponentStyles.verseText}>
+        {props.verse}
+      </Text>
+    </SafeAreaView>
+  );
+};
+
+const reusableTrendingVerseComponentStyles = StyleSheet.create({
+  container: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+
+  verseName: {
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+
+  verseText: {
+    fontSize: 14,
+    color: "grey",
   },
 });
 
