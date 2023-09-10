@@ -22,7 +22,7 @@ function HeaderBar(props) {
           style={{
             width: 30,
             height: 30,
-            marginLeft: 10,
+            marginLeft: 15,
           }}
         />
       </SafeAreaView>
@@ -33,7 +33,7 @@ function HeaderBar(props) {
           style={{
             width: 30,
             height: 30,
-            marginRight: 10,
+            marginRight: 15,
           }}
         />
       </SafeAreaView>
@@ -125,7 +125,7 @@ const stylesHeader = StyleSheet.create({
     flexDirection: "row",
 
     backgroundColor: theme.colors.primary,
-    height: 105,
+    height: 110,
   },
 
   text: {
