@@ -6,6 +6,7 @@ import { theme } from "./utils/theme";
 // Screens
 import HomeScreen from "./screens/HomeScreen";
 import BibleScreen from "./screens/BibleScreen";
+import TimelineScreen from "./screens/TimelineScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -83,6 +84,27 @@ export default function App() {
               tabBarIcon: ({ focused, color, size }) => (
                 <Image
                   source={require("./assets/icons/bible.png")}
+                  style={{
+                    width: 30,
+                    height: 30,
+                  }}
+                />
+              ),
+            }}
+          />
+          {/* TimelineScreen */}
+          <Tab.Screen
+            name="Timeline"
+            component={TimelineScreen}
+            options={{
+              // Header bar
+              header: (props) => <HeaderBar {...props} />,
+              // Label of tab icon
+              tabBarLabel: "Explore",
+              // Image of icon
+              tabBarIcon: ({ focused, color, size }) => (
+                <Image
+                  source={require("./assets/icons/magnifying-glass.png")}
                   style={{
                     width: 30,
                     height: 30,
