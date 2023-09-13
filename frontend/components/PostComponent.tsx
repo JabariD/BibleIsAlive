@@ -8,7 +8,8 @@ import { StyleSheet, Text, SafeAreaView, Image } from "react-native";
  *
  */
 
-const fakeText = "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Minus recusandae id, incidunt quae dignissimos nihil cumque culpa ex deserunt quos hic sapiente asperiores suscipit placeat unde labore provident? Enim, reiciendis.";
+const fakeText =
+  "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Minus recusandae id, incidunt quae dignissimos nihil cumque culpa ex deserunt quos hic sapiente asperiores suscipit placeat unde labore provident? Enim, reiciendis.";
 
 export type Props = {};
 const PostComponent: React.FC<Props> = (props) => {
@@ -39,13 +40,26 @@ const PostComponent: React.FC<Props> = (props) => {
       </SafeAreaView>
 
       {/* Text */}
-      <SafeAreaView style={postTextContainerStyles.container}><Text>{fakeText}</Text></SafeAreaView>
+      <SafeAreaView style={postTextContainerStyles.container}>
+        <Text>{fakeText}</Text>
+      </SafeAreaView>
 
       {/* Referenced Bible verse */}
       <SafeAreaView></SafeAreaView>
 
       {/* Footer */}
-      <SafeAreaView></SafeAreaView>
+      <SafeAreaView style={postFooterStyles.container}>
+        <Image
+          source={require("../assets/icons/heart.png")}
+          style={{ height: 30, width: 30, marginLeft: 10, marginRight: 7 }}
+        />
+        <Text>123</Text>
+        <Image
+          source={require("../assets/icons/chat.png")}
+          style={{ height: 30, width: 30, marginLeft: 10, marginRight: 7 }}
+        />
+        <Text>12</Text>
+      </SafeAreaView>
     </SafeAreaView>
   );
 };
@@ -56,6 +70,8 @@ const postStyles = StyleSheet.create({
   container: {
     display: "flex",
     flexDirection: "column",
+
+    marginBottom: 20,
 
     // Temporary
     borderWidth: 1,
@@ -94,6 +110,15 @@ const postHeaderStyles = StyleSheet.create({
 const postTextContainerStyles = StyleSheet.create({
   container: {
     display: "flex",
+    alignItems: "center",
+    marginBottom: 7,
+  },
+});
+
+const postFooterStyles = StyleSheet.create({
+  container: {
+    display: "flex",
+    flexDirection: "row",
     alignItems: "center",
   },
 });
