@@ -8,6 +8,8 @@ import { StyleSheet, Text, SafeAreaView, Image } from "react-native";
  *
  */
 
+const fakeText = "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Minus recusandae id, incidunt quae dignissimos nihil cumque culpa ex deserunt quos hic sapiente asperiores suscipit placeat unde labore provident? Enim, reiciendis.";
+
 export type Props = {};
 const PostComponent: React.FC<Props> = (props) => {
   return (
@@ -15,7 +17,7 @@ const PostComponent: React.FC<Props> = (props) => {
       {/* Header */}
       <SafeAreaView style={postHeaderStyles.container}>
         {/* Left */}
-        <SafeAreaView style={postHeaderStyles.profileImageNameAndTime}>
+        <SafeAreaView style={postHeaderStyles.profileImageNameAndTimeContainer}>
           <Image
             source={require("../assets/images/profile-image.png")}
             style={{ height: 50, width: 50, borderRadius: 30, marginRight: 10 }}
@@ -37,7 +39,7 @@ const PostComponent: React.FC<Props> = (props) => {
       </SafeAreaView>
 
       {/* Text */}
-      <SafeAreaView></SafeAreaView>
+      <SafeAreaView style={postTextContainerStyles.container}><Text>{fakeText}</Text></SafeAreaView>
 
       {/* Referenced Bible verse */}
       <SafeAreaView></SafeAreaView>
@@ -67,9 +69,12 @@ const postHeaderStyles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
+    marginLeft: 10,
+    marginRight: 10,
+    marginBottom: 5,
   },
 
-  profileImageNameAndTime: {
+  profileImageNameAndTimeContainer: {
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
@@ -83,6 +88,13 @@ const postHeaderStyles = StyleSheet.create({
   time: {
     fontSize: 12,
     color: "gray",
+  },
+});
+
+const postTextContainerStyles = StyleSheet.create({
+  container: {
+    display: "flex",
+    alignItems: "center",
   },
 });
 
