@@ -3,6 +3,7 @@
 import React from 'react';
 
 import { SafeAreaView, Text, StyleSheet, ScrollView } from 'react-native';
+import { useNavigation } from "@react-navigation/native";
 
 // Components
 import PostComponent from '../components/PostComponent';
@@ -22,7 +23,7 @@ const TimelineScreen: React.FC<Props> = () => {
                 <Text>TimelineScreen</Text>
                 <PostComponent />
             </SafeAreaView>
-        </ScrollView>
+        </ScrollView> 
     );
 }
 
