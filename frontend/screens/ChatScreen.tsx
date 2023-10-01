@@ -29,6 +29,13 @@ const ChatScreen: React.FC<Props> = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputText, setInputText] = useState("");
 
+  /**
+   * Adds a new user message to the chat screen.
+   *
+   * If the input text is not empty, a new message object is created with the input text and a flag indicating that it is a user message.
+   * The new message object is then added to the messages array using the spread operator.
+   * Finally, the input text is cleared by setting it to an empty string.
+   */
   const sendUserMessageToScreen = () => {
     if (inputText.trim() !== "") {
       setMessages([...messages, { text: inputText, isUser: true }]);
