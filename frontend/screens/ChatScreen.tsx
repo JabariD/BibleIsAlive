@@ -37,10 +37,12 @@ const ChatScreen: React.FC<Props> = () => {
    * Finally, the input text is cleared by setting it to an empty string.
    */
   const sendUserMessageToScreen = () => {
-    if (inputText.trim() !== "") {
-      setMessages([...messages, { text: inputText, isUser: true }]);
-      setInputText("");
+    if (inputText.trim() === "") {
+      return;
     }
+
+    setMessages([...messages, { text: inputText, isUser: true }]);
+    setInputText("");
   };
 
   return (
