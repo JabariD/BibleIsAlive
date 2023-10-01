@@ -123,7 +123,7 @@ export default function App() {
           name="Settings"
           component={SettingsScreen}
           options={{
-            headerBackTitle: "Settings",
+            headerBackTitle: "Back",
           }}
         />
       </Stack.Navigator>
