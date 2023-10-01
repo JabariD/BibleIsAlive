@@ -12,6 +12,7 @@ import BibleScreen from "./screens/BibleScreen";
 import TimelineScreen from "./screens/TimelineScreen";
 import ProfileScreen from "./screens/ProfileScreen";
 import SettingsScreen from "./screens/SettingsScreen";
+import ChatScreen from "./screens/ChatScreen";
 
 // Components
 import HeaderBarComponent from "./components/HeaderBarComponent";
@@ -81,6 +82,27 @@ const TabNavigation = () => {
           tabBarIcon: ({ focused, color, size }) => (
             <Image
               source={require("./assets/icons/magnifying-glass.png")}
+              style={{
+                width: 30,
+                height: 30,
+              }}
+            />
+          ),
+        }}
+      />
+      {/* ChatScreen */}
+      <Tab.Screen
+        name="Chat"
+        component={ChatScreen}
+        options={{
+          // Header bar
+          header: (props) => <HeaderBarComponent {...props} />,
+          // Label of tab icon
+          tabBarLabel: "Chat",
+          // Image of icon
+          tabBarIcon: ({ focused, color, size }) => (
+            <Image
+              source={require("./assets/icons/bubble-chat.png")}
               style={{
                 width: 30,
                 height: 30,
