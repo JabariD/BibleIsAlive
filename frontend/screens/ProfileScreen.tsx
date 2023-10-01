@@ -1,5 +1,47 @@
 import React from "react";
-import { StyleSheet, Text, SafeAreaView, Image } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  SafeAreaView,
+  View,
+  TouchableOpacity,
+  Image,
+} from "react-native";
+
+//
+/**
+ * Renders a container for a church with the provided props.
+ * @param image - The image to display for the church.
+ * @param churchName - The name of the church.
+ * @param subtitle - The subtitle for the church.
+ * @returns A React component that displays the church container.
+ */
+const ChurchContainer = ({
+  image,
+  churchName,
+  subtitle,
+}: {
+  image: any;
+  churchName: string;
+  subtitle: string;
+}) => {
+  // Render the church container with the provided props
+  return (
+    <View style={churchStyles.churchContainer}>
+      <Image source={image} style={churchStyles.image} />
+      <View style={churchStyles.textContainer}>
+        <Text style={churchStyles.headerText}>{churchName}</Text>
+        <Text style={churchStyles.subtitleText}>{subtitle}</Text>
+      </View>
+      <TouchableOpacity>
+        <Image
+          source={require("../assets/icons/next.png")}
+          style={churchStyles.arrow}
+        />
+      </TouchableOpacity>
+    </View>
+  );
+};
 
 /**
  * ProfileScreen
@@ -15,8 +57,7 @@ export type Props = {};
 const ProfileScreen: React.FC<Props> = () => {
   return (
     <SafeAreaView style={profileScreenStyles.container}>
-
-        {/* TODO: Add user level. */}
+      {/* TODO: Add user level. */}
       <SafeAreaView style={headerStyles.container}>
         <SafeAreaView style={headerStyles.profileImageNameAndTimeContainer}>
           {/* Image */}
@@ -55,7 +96,22 @@ const ProfileScreen: React.FC<Props> = () => {
 
       {/* Churches */}
       <SafeAreaView>
-        <Text>Churches</Text>
+        <View style={churchStyles.headerContainer}>
+          <Text style={churchStyles.header}>Your Churches</Text>
+          <TouchableOpacity>
+            <Text style={churchStyles.addNew}>Add New</Text>
+          </TouchableOpacity>
+        </View>
+        <ChurchContainer
+          image={require("../assets/images/church.jpg")}
+          churchName="Church Name 1"
+          subtitle="Role: Member"
+        />
+        <ChurchContainer
+          image={require("../assets/images/church.jpg")}
+          churchName="Church Name 2"
+          subtitle="Role: Follower"
+        />
       </SafeAreaView>
 
       {/* Footer */}
@@ -102,10 +158,10 @@ const headerStyles = StyleSheet.create({
 });
 
 const bioStyles = StyleSheet.create({
-   container: {
-       marginTop: 20,
-       marginBottom: 70
-   } 
+  container: {
+    marginTop: 20,
+    marginBottom: 70,
+  },
 });
 
 const footerStyles = StyleSheet.create({
@@ -117,7 +173,7 @@ const footerStyles = StyleSheet.create({
     rowGap: 10,
   },
 
-  text : {
+  text: {
     fontSize: 16,
     fontWeight: "bold",
   },
@@ -126,6 +182,49 @@ const footerStyles = StyleSheet.create({
     color: "red",
     fontSize: 16,
     fontWeight: "bold",
+  },
+});
+
+const churchStyles = StyleSheet.create({
+  headerContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  header: {
+    fontSize: 24,
+    fontWeight: "bold",
+  },
+  addNew: {
+    fontSize: 18,
+    color: "grey",
+  },
+  churchContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  image: {
+    width: 50,
+    height: 50,
+    marginRight: 10,
+    borderRadius: 10,
+  },
+  textContainer: {
+    flex: 1,
+  },
+  headerText: {
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  subtitleText: {
+    fontSize: 16,
+    color: "gray",
+  },
+  arrow: {
+    width: 20,
+    height: 20,
   },
 });
 
