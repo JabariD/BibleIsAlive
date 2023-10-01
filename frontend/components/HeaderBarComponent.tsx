@@ -20,25 +20,31 @@ import { createStackNavigator } from "@react-navigation/stack";
 const HeaderBarComponent = () => {
   const navigation = useNavigation();
 
-  const onPress = () => {
+  const navigateToProfile = () => {
     navigation.navigate("Profile");
+  };
+
+  const navigateToSettings = () => {
+    navigation.navigate("Settings");
   };
 
   return (
     <SafeAreaView style={stylesHeader.container}>
       <SafeAreaView>
-        <Image
-          source={require("../assets/icons/bookmark.png")}
-          style={{
-            width: 30,
-            height: 30,
-            marginLeft: 15,
-          }}
-        />
+        <TouchableOpacity onPress={navigateToSettings}>
+          <Image
+            source={require("../assets/icons/settings.png")}
+            style={{
+              width: 30,
+              height: 30,
+              marginLeft: 15,
+            }}
+          />
+        </TouchableOpacity>
       </SafeAreaView>
       <Text style={stylesHeader.text}>Home</Text>
       <SafeAreaView>
-        <TouchableOpacity onPress={onPress}>
+        <TouchableOpacity onPress={navigateToProfile}>
           <Image
             source={require("../assets/icons/user.png")}
             style={{

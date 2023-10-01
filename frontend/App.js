@@ -11,6 +11,7 @@ import HomeScreen from "./screens/HomeScreen";
 import BibleScreen from "./screens/BibleScreen";
 import TimelineScreen from "./screens/TimelineScreen";
 import ProfileScreen from "./screens/ProfileScreen";
+import SettingsScreen from "./screens/SettingsScreen";
 
 // Components
 import HeaderBarComponent from "./components/HeaderBarComponent";
@@ -116,6 +117,13 @@ export default function App() {
           component={ProfileScreen}
           options={{
             headerBackTitle: "Back",
+          }}
+        />
+        <Stack.Screen
+          name="Settings"
+          component={SettingsScreen}
+          options={{
+            headerBackTitle: "Settings",
           }}
         />
       </Stack.Navigator>
