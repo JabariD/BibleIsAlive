@@ -13,6 +13,7 @@ import TimelineScreen from "./screens/TimelineScreen";
 import ProfileScreen from "./screens/ProfileScreen";
 import SettingsScreen from "./screens/SettingsScreen";
 import ChatScreen from "./screens/ChatScreen";
+import KnowledgeScreen from "./screens/KnowledgeScreen";
 
 // Components
 import HeaderBarComponent from "./components/HeaderBarComponent";
@@ -144,6 +145,13 @@ export default function App() {
         <Stack.Screen
           name="Settings"
           component={SettingsScreen}
+          options={{
+            headerBackTitle: "Back",
+          }}
+        />
+        <Stack.Screen
+          name="Knowledge"
+          component={KnowledgeScreen}
           options={{
             headerBackTitle: "Back",
           }}

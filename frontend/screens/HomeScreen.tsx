@@ -6,8 +6,10 @@ import {
   Image,
   ScrollView,
   View,
+  TouchableOpacity,
 } from "react-native";
 import { Button } from "react-native-elements";
+import { useNavigation } from "@react-navigation/native";
 
 import HomeCardComponent from "../components/HomeCardComponent";
 
@@ -60,6 +62,12 @@ const fetchUserHighlights = () => {};
 export type Props = {};
 
 const HomeScreen: React.FC<Props> = () => {
+  const navigation = useNavigation();
+
+  const navigateToKnowledgeScreen = () => {
+    navigation.navigate("Knowledge");
+  };
+
   return (
     <SafeAreaView style={styleHomeScreen.container}>
       {/* Welcome Header */}
@@ -68,25 +76,38 @@ const HomeScreen: React.FC<Props> = () => {
         <Text style={styleWelcomeHeader.name}>Payton</Text>
       </SafeAreaView>
 
-      {/* Level - Quick actions? */}
+      {/* Level */}
       <SafeAreaView style={styleLevel.container}>
         <Text style={styleLevel.levelTitle}>Level: 1</Text>
-        <Text style={styleLevel.levelSubTitle}>Add more experiences to mature!</Text>
+        <Text style={styleLevel.levelSubTitle}>
+          Add more experiences to mature!
+        </Text>
         {/* Progress bar */}
-        <SafeAreaView style={styleLevel.progressBar}><SafeAreaView></SafeAreaView></SafeAreaView>
+        <SafeAreaView style={styleLevel.progressBar}>
+          <SafeAreaView></SafeAreaView>
+        </SafeAreaView>
         <Text style={styleLevel.rewardText}>Level 2 Reward: NEW BADGE!</Text>
       </SafeAreaView>
 
-      {/* Badges */}
-      <SafeAreaView>
-        <Text style={styleBadges.header}>Badges</Text>
-        {/* Rows and columns of badges in grid format. */}
-        <SafeAreaView style={styleBadges.badgeContainer}>
-          {fetchBadges().map((badge) => badge)}
+      {/* Quick Actions */}
+      <SafeAreaView style={styleQuickActions.container}>
+        <SafeAreaView style={styleQuickActions.actionableCard}>
+          <TouchableOpacity style={styleQuickActions.gradientButton} onPress={navigateToKnowledgeScreen}>
+            <Text style={styleQuickActions.buttonText}>Your Knowledge</Text>
+          </TouchableOpacity>
         </SafeAreaView>
       </SafeAreaView>
 
       <ScrollView>
+        {/* Badges */}
+        <SafeAreaView>
+          <Text style={styleBadges.header}>Badges</Text>
+          {/* Rows and columns of badges in grid format. */}
+          <SafeAreaView style={styleBadges.badgeContainer}>
+            {fetchBadges().map((badge) => badge)}
+          </SafeAreaView>
+        </SafeAreaView>
+
         {/* Prayer card */}
         <SafeAreaView style={styleSection.container}>
           <SafeAreaView style={styleSectionHeader.headerContainer}>
@@ -190,6 +211,33 @@ const styleLevel = StyleSheet.create({
     height: 25,
     borderRadius: 10,
     backgroundColor: "grey",
+  },
+});
+
+const styleQuickActions = StyleSheet.create({
+  container: {},
+  actionableCard: {
+    borderRadius: 10,
+    padding: 20,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  gradientButton: {
+    backgroundColor: "#EDD47C",
+    borderRadius: 5,
+    padding: 10,
+    alignItems: "center",
+    width: 175,
+  },
+  buttonText: {
+    color: "#fff",
+    fontWeight: "bold",
   },
 });
 
