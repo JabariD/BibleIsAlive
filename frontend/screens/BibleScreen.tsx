@@ -5,7 +5,9 @@ import {
   Image,
   StyleSheet,
   ScrollView,
+  TouchableOpacity,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 export type Props = {};
 
@@ -16,6 +18,12 @@ export type Props = {};
  *
  */
 const BibleScreen: React.FC<Props> = () => {
+  const navigation = useNavigation();
+
+  const navigateToReading = () => {
+    navigation.navigate("Reading");
+  };
+
   return (
     <SafeAreaView style={screenStyles.container}>
       {/* Continue Reading section*/}
@@ -27,16 +35,18 @@ const BibleScreen: React.FC<Props> = () => {
         </SafeAreaView>
 
         {/* Image */}
-        <Image
-          source={require("../assets/images/cross.jpg")}
-          style={{
-            height: 200,
-            width: "100%",
-            borderRadius: 15,
-            marginBottom: 10,
-            resizeMode: "cover",
-          }}
-        />
+        <TouchableOpacity onPress={navigateToReading}>
+          <Image
+            source={require("../assets/images/cross.jpg")}
+            style={{
+              height: 200,
+              width: "100%",
+              borderRadius: 15,
+              marginBottom: 10,
+              resizeMode: "cover",
+            }}
+          />
+        </TouchableOpacity>
 
         {/* Text */}
         <Text style={continueReadingStyles.verseText}>
