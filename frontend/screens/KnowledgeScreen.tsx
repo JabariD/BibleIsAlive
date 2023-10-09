@@ -13,31 +13,6 @@ interface KnowledgeComponentProps {
   headerText: string;
   subtitleText: string;
 }
-// const KnowledgeComponent: React () => {
-//   return (
-//     <SafeAreaView style={stylesKnowledgeComponent.container}>
-//       <SafeAreaView style={stylesKnowledgeComponent.imageAndTextContainer}>
-//         {/* Image */}
-//         <Image
-//           source={require("../assets/images/church.jpg")}
-//           style={{ width: 80, height: 80, borderRadius: 10, marginRight: 25 }}
-//         />
-//         {/* Text */}
-//         <SafeAreaView>
-//           <Text style={stylesKnowledgeComponent.headerText}>abc</Text>
-//           <Text style={stylesKnowledgeComponent.subtitleText}>abc</Text>
-//         </SafeAreaView>
-//       </SafeAreaView>
-//       {/* Icon */}
-//       <SafeAreaView>
-//         <Image
-//           source={require("../assets/icons/bookmark.png")}
-//           style={{ width: 30, height: 30 }}
-//         />
-//       </SafeAreaView>
-//     </SafeAreaView>
-//   );
-// };
 const KnowledgeComponent: React.FC<KnowledgeComponentProps> = ({
   headerText,
   subtitleText,
