@@ -55,7 +55,9 @@ const ReadingScreen: React.FC<Props> = () => {
           <Text style={stylesBibleTextAndRecentPosts.bibleText}>{text}</Text>
         </SafeAreaView>
         {/* Recent Posts */}
-        <SafeAreaView style={stylesBibleTextAndRecentPosts.recentPostsContainer}>
+        <SafeAreaView
+          style={stylesBibleTextAndRecentPosts.recentPostsContainer}
+        >
           <UserPost />
           <UserPost />
           <UserPost />
@@ -94,10 +96,11 @@ const stylesBibleTextAndRecentPosts = StyleSheet.create({
     marginTop: 30,
     display: "flex",
     flexDirection: "row",
+    justifyContent: "space-between",
   },
 
   bibleTextContainer: {
-    width: "85%",
+    width: "80%",
   },
 
   bibleText: {
