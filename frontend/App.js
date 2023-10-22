@@ -68,7 +68,7 @@ const TabNavigation = () => {
           component={screen.component}
           options={{
             header: (props) => <HeaderBarComponent {...props} />,
-            tabBarLabel: ({ focused, color, size }) => (<Text style={{ tintColor: "gray", color: "gray" }}>{screen.name}</Text>),
+            tabBarLabel: ({ focused, color, size }) => (<Text style={{ color: "gray" }}>{screen.name}</Text>),
             tabBarIcon: ({ focused, color, size }) => (
               <Image
                 source={screen.icon}
