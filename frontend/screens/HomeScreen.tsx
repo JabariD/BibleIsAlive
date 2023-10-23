@@ -233,6 +233,7 @@ const styleHomeScreen = StyleSheet.create({
 const styleWelcomeHeader = StyleSheet.create({
   welcomeBack: {
     fontSize: 20,
+    marginBottom: 5,
   },
   name: {
     fontSize: 40,
