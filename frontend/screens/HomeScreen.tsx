@@ -259,13 +259,13 @@ const styleLevel = StyleSheet.create({
   levelTitle: {
     fontSize: 20,
     margin: 10,
-    marginBottom: 5,
+    marginBottom: 10,
     fontWeight: "bold",
   },
 
   levelSubTitle: {
     marginLeft: 10,
-    marginBottom: 5,
+    marginBottom: 10,
     fontSize: 15,
     color: "grey",
   },
@@ -280,6 +280,7 @@ const styleLevel = StyleSheet.create({
 
   progressBarContainer: {
     marginLeft: 10,
+    marginBottom: 5,
   },
 
   progressBar: {
