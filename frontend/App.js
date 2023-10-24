@@ -124,7 +124,6 @@ export default function App() {
           {
             name: "Settings", component: SettingsScreen, options: {
               headerBackTitle: "Back",
-              gestureDirection: 'horizontal-inverted',
               headerStyleInterpolator: HeaderStyleInterpolators.forFade,
               cardStyleInterpolator: CardStyleInterpolators.forModalPresentationIOS,
             }
