@@ -17,7 +17,7 @@ import { createStackNavigator } from "@react-navigation/stack";
  *
  * <HeaderBar options={{ tabBarLabel: 'Home' }} />
  */
-const HeaderBarComponent = () => {
+const HeaderBarComponent = (props: any) => {
   const navigation = useNavigation();
 
   const navigateToProfile = () => {
@@ -42,7 +42,7 @@ const HeaderBarComponent = () => {
           />
         </TouchableOpacity>
       </SafeAreaView>
-      <Text style={stylesHeader.text}>Home</Text>
+      <Text style={stylesHeader.text}>{props.title}</Text>
       <SafeAreaView>
         <TouchableOpacity onPress={navigateToProfile}>
           <Image
