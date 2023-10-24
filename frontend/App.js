@@ -20,7 +20,7 @@ import { Image, StatusBar, Text } from "react-native";
 // React Native Navigation
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { createStackNavigator } from "@react-navigation/stack";
+import { createStackNavigator, HeaderStyleInterpolators, CardStyleInterpolators } from "@react-navigation/stack";
 
 // Screens
 import HomeScreen from "./screens/HomeScreen";
@@ -121,7 +121,14 @@ export default function App() {
         {[
           { name: "TabNavigationHome", component: TabNavigation, options: { headerShown: false } },
           { name: "Profile", component: ProfileScreen, options: { headerBackTitle: "Back" } },
-          { name: "Settings", component: SettingsScreen, options: { headerBackTitle: "Back" } },
+          {
+            name: "Settings", component: SettingsScreen, options: {
+              headerBackTitle: "Back",
+              gestureDirection: 'horizontal-inverted',
+              headerStyleInterpolator: HeaderStyleInterpolators.forFade,
+              cardStyleInterpolator: CardStyleInterpolators.forModalPresentationIOS,
+            }
+          },
           { name: "Knowledge", component: KnowledgeScreen, options: { headerBackTitle: "Back" } },
           { name: "Reading", component: ReadingScreen, options: { headerBackTitle: "Back" } },
         ].map((screen) => (
