@@ -13,6 +13,7 @@ import {
   ScrollView,
   View,
   TouchableOpacity,
+  TextInput,
   Button,
 } from "react-native";
 import VerseComponent from "../components/VerseComponent";
@@ -50,6 +51,14 @@ export type Props = {};
 const ReadingScreen: React.FC<Props> = () => {
   return (
     <SafeAreaView style={stylesScreen.container}>
+      {/* SearchBar */}
+      {/* Search Bar */}
+      <TextInput
+        style={stylesHeader.searchBar}
+        placeholder="Search for verse, topic, or subject."
+      />
+
+
       {/* Header */}
       <SafeAreaView style={stylesHeader.bibleHeaderContainer}>
         <Text style={stylesHeader.bibleHeaderText}>Rom 3</Text>
@@ -63,7 +72,7 @@ const ReadingScreen: React.FC<Props> = () => {
           <SafeAreaView style={stylesBibleTextAndRecentPosts.bibleTextContainer}>
             <VerseComponent key={1} number={0 + 1} verse={"Hehehe hi"} />
             <VerseComponent key={2} number={0 + 2} verse={"woah woah woah"} />
-            {/* <Text style={stylesBibleTextAndRecentPosts.bibleText}>{text}</Text> */}
+            <Text style={stylesBibleTextAndRecentPosts.bibleText}>{text}</Text>
           </SafeAreaView>
           {/* Recent Posts */}
           <SafeAreaView
@@ -100,6 +109,16 @@ const stylesScreen = StyleSheet.create({
 });
 
 const stylesHeader = StyleSheet.create({
+  searchBar: {
+    height: 40,
+    borderRadius: 20,
+    borderWidth: 0.5,
+    padding: 5,
+    marginBottom: 10,
+    borderColor: "grey",
+    backgroundColor: '#f0f0f0',
+  },
+
   bibleHeaderContainer: {
     display: "flex",
     flexDirection: "row",
