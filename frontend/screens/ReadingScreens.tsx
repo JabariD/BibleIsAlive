@@ -4,7 +4,7 @@
  * It also includes a header and GPT icons.
  */
 
-import React from "react";
+import React, { useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -49,13 +49,38 @@ const trendingPostsStyles = StyleSheet.create({
 
 export type Props = {};
 const ReadingScreen: React.FC<Props> = () => {
+  // State
+  const [selectedVerses, setSelectedVerses] = useState<number[]>([]);
+  const [searchText, setSearchText] = useState(''); 
+
+  // State Management
+  // Function to handle verse selection
+  const handleVerseSelection = (selectedVerseNumber: number) => {
+    // Update the selected verses state
+    setSelectedVerses(previousSelectedVerses => {
+      let updatedSelectedVerses;
+      // Check if the verse is already selected
+      if (previousSelectedVerses.includes(selectedVerseNumber)) {
+        // If the verse is already selected, remove it from the array
+        updatedSelectedVerses = previousSelectedVerses.filter(verseNumber => verseNumber !== selectedVerseNumber);
+      } else {
+        // If the verse is not selected, add it to the array
+        updatedSelectedVerses = [...previousSelectedVerses, selectedVerseNumber];
+      }
+
+      return updatedSelectedVerses;
+    });
+  };
+
   return (
+    <>
     <SafeAreaView style={stylesScreen.container}>
-      {/* SearchBar */}
       {/* Search Bar */}
       <TextInput
         style={stylesHeader.searchBar}
         placeholder="Search for verse, topic, or subject."
+        value={searchText}
+        onChangeText={setSearchText}
       />
 
 
@@ -70,8 +95,8 @@ const ReadingScreen: React.FC<Props> = () => {
         <SafeAreaView style={stylesBibleTextAndRecentPosts.container}>
           {/* Text */}
           <SafeAreaView style={stylesBibleTextAndRecentPosts.bibleTextContainer}>
-            <VerseComponent key={1} number={0 + 1} verse={"Hehehe hi"} />
-            <VerseComponent key={2} number={0 + 2} verse={"woah woah woah"} />
+            <VerseComponent key={1} number={0 + 1} verse={"Hehehe hi"} onVerseSelect={handleVerseSelection} isSelected={selectedVerses.includes(1)} />
+            <VerseComponent key={2} number={0 + 2} verse={"woah woah woah"} onVerseSelect={handleVerseSelection} isSelected={selectedVerses.includes(2)} />
             <Text style={stylesBibleTextAndRecentPosts.bibleText}>{text}</Text>
           </SafeAreaView>
           {/* Recent Posts */}
@@ -86,16 +111,31 @@ const ReadingScreen: React.FC<Props> = () => {
       </ScrollView>
 
       {/* GPT icons */}
-      <SafeAreaView style={stylesGPTIcons.iconContainer}>
-        <TouchableOpacity>
-          {/* Todo opens model on touch https://gorhom.github.io/react-native-bottom-sheet/modal/ */}
-          <Image
-            source={require("../assets/icons/stars.png")}
-            style={stylesGPTIcons.icon}
-          />
-        </TouchableOpacity>
-      </SafeAreaView>
+      {selectedVerses.length === 0 && (
+        <SafeAreaView style={stylesGPTIcons.iconContainer}>
+          <TouchableOpacity>
+            {/* Todo opens model on touch https://gorhom.github.io/react-native-bottom-sheet/modal/ */}
+            <Image
+              source={require("../assets/icons/stars.png")}
+              style={stylesGPTIcons.icon}
+            />
+          </TouchableOpacity>
+        </SafeAreaView>
+      )}
     </SafeAreaView>
+    {/* Bottom Component */}
+    {selectedVerses.length > 0 && (
+        <SafeAreaView style={stylesBottomScreenModal.bottomView}>
+          <Text>Action for verses {selectedVerses.join(', ')}</Text>
+          <TouchableOpacity
+            style={stylesBottomScreenModal.closeButton}
+            onPress={() => setSelectedVerses([])}
+          >
+            <Text style={stylesBottomScreenModal.textStyle}>Close</Text>
+          </TouchableOpacity>
+        </SafeAreaView>
+      )}
+    </>
   );
 };
 
@@ -170,6 +210,37 @@ const stylesGPTIcons = StyleSheet.create({
     bottom: 10,
     height: 50,
     width: 50
+  },
+});
+
+const stylesBottomScreenModal = StyleSheet.create({
+  bottomView: {
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
+    backgroundColor: '#FFFFFF', // Change this to match your app's design
+    padding: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+
+    borderRadius: 15,
+
+    shadowColor: '#000', // Shadow color for iOS
+    shadowOffset: { width: 0, height: -2 }, // Shadow offset for iOS
+    shadowOpacity: 0.25, // Shadow opacity for iOS
+    shadowRadius: 4, // Shadow radius for iOS
+    elevation: 5, // Shadow for Android
+  },
+  closeButton: {
+    backgroundColor: "#2196F3",
+    borderRadius: 20,
+    padding: 10,
+    marginTop: 10,
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
   },
 });
 
