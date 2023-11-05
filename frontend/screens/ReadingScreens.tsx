@@ -4,7 +4,7 @@
  * It also includes a header and GPT icons.
  */
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -51,6 +51,11 @@ const UserPost: React.FC<UserPostProps> = () => {
 
 export type Props = {};
 const ReadingScreen: React.FC<Props> = () => {
+  // On first render.
+  useEffect(() => {
+    fetchVerses();
+  }, []);
+
   // State
   // selectedVerses state is used to keep track of the verses selected by the user on tap
   const [selectedVerses, setSelectedVerses] = useState<number[]>([]);
@@ -58,16 +63,18 @@ const ReadingScreen: React.FC<Props> = () => {
   const [searchText, setSearchText] = useState('');
   // isModalBiblePickerVisible state is used to control the visibility of the Bible Picker Modal
   const [isModalBiblePickerVisible, setModalBiblePickerVisible] = useState(false);
+  // tempSelectedBook state is used to store the temporary book selected by the user in the Bible Picker Modal
   const [tempSelectedBook, setTempSelectedBook] = useState('Genesis');
+  // tempSelectedChapter state is used to store the temporary chapter selected by the user in the Bible Picker Modal
   const [tempSelectedChapter, setTempSelectedChapter] = useState(1);
+  // TODO: Use React's Context API to create a global state that persists across different screens. 
   // selectedBook state is used to store the book selected by the user in the Bible Picker Modal
   const [selectedBook, setSelectedBook] = useState('Genesis');
   // selectedChapter state is used to store the chapter selected by the user in the Bible Picker Modal
   const [selectedChapter, setSelectedChapter] = useState(1);
-  // verses to display on Bible Screen.
+  // verses state is used to store the verses to display on Bible Screen.
   const [verses, setVerses] = useState<string[]>([]);
 
-  // State Management
   // Function to handle verse selection
   const handleVerseSelection = (selectedVerseNumber: number, selectedVerseContent: string) => {
     // Update the selected verses state
@@ -96,7 +103,8 @@ const ReadingScreen: React.FC<Props> = () => {
   // Function to handle the change of the selected book in the Bible Picker Modal
   const handleBookChange = (book: string) => {
     setTempSelectedBook(book);
-    setTempSelectedChapter(1); // Reset chapter selection when book changes
+    // Reset chapter selection when book changes
+    setTempSelectedChapter(1); 
   };
 
   // Function to handle the change of the selected chapter in the Bible Picker Modal
@@ -104,6 +112,7 @@ const ReadingScreen: React.FC<Props> = () => {
     setTempSelectedChapter(chapter);
   };
 
+  // Function to fetch verses from the Bible API
   const fetchVerses = async () => {
     try {
       const response = await BibleAPI.getChapterVerses(selectedBook, selectedChapter);
@@ -115,6 +124,7 @@ const ReadingScreen: React.FC<Props> = () => {
     }
   };
 
+  // Function to handle the confirmation of the selection in the Bible Picker Modal
   const handleConfirmSelection = () => {
     setSelectedBook(tempSelectedBook);
     setSelectedChapter(tempSelectedChapter);
