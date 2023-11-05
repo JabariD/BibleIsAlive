@@ -56,11 +56,11 @@ export type Props = {};
 const ReadingScreen: React.FC<Props> = () => {
   // State
   const [selectedVerses, setSelectedVerses] = useState<number[]>([]);
-  const [searchText, setSearchText] = useState(''); 
+  const [searchText, setSearchText] = useState('');
 
   // State Management
   // Function to handle verse selection
-  const handleVerseSelection = (selectedVerseNumber: number) => {
+  const handleVerseSelection = (selectedVerseNumber: number, selectedVerseContent: string) => {
     // Update the selected verses state
     setSelectedVerses(previousSelectedVerses => {
       let updatedSelectedVerses;
@@ -75,6 +75,8 @@ const ReadingScreen: React.FC<Props> = () => {
 
       return updatedSelectedVerses;
     });
+
+    // Perform additional processing...
   };
 
   // Dynamic styles.
@@ -83,62 +85,66 @@ const ReadingScreen: React.FC<Props> = () => {
 
   return (
     <>
-    <SafeAreaView style={[stylesScreen.container, {paddingBottom: bottomPadding}]}>
-      {/* Search Bar */}
-      <TextInput
-        style={stylesHeader.searchBar}
-        placeholder="Search for verse, topic, or subject."
-        value={searchText}
-        onChangeText={setSearchText}
-      />
+      <SafeAreaView style={[stylesScreen.container, { paddingBottom: bottomPadding }]}>
+        {/* Search Bar */}
+        <TextInput
+          style={stylesHeader.searchBar}
+          placeholder="Search for verse, topic, or subject."
+          value={searchText}
+          onChangeText={setSearchText}
+        />
 
 
-      {/* Header */}
-      <SafeAreaView style={stylesHeader.bibleHeaderContainer}>
-        <Text style={stylesHeader.bibleHeaderText}>Rom 3</Text>
-        <Text style={stylesHeader.bibleHeaderText}>ESV</Text>
+        {/* Header */}
+        <SafeAreaView style={stylesHeader.bibleHeaderContainer}>
+          <Text style={stylesHeader.bibleHeaderText}>Rom 3</Text>
+          <Text style={stylesHeader.bibleHeaderText}>ESV</Text>
+        </SafeAreaView>
+
+        {/* Bible Text and recent posts */}
+        <ScrollView contentContainerStyle={{ paddingBottom: bottomPadding }}>
+          <SafeAreaView style={stylesBibleTextAndRecentPosts.container}>
+            {/* Text */}
+            <SafeAreaView style={stylesBibleTextAndRecentPosts.bibleTextContainer}>
+              {/* Note: This will be mapped, based on the verses retrieved. */}
+              <VerseComponent key={1} number={0 + 1} verse={"Hehehe hi"} onVerseSelect={() => handleVerseSelection(0 + 1, "Hehehe hi")} isSelected={selectedVerses.includes(1)} />
+              <VerseComponent key={2} number={0 + 2} verse={"woah woah woah"} onVerseSelect={() => handleVerseSelection(0 + 2, "woah woah woah")} isSelected={selectedVerses.includes(2)} />
+              <Text style={stylesBibleTextAndRecentPosts.bibleText}>{text}</Text>
+            </SafeAreaView>
+            {/* Recent Posts */}
+            <SafeAreaView
+              style={stylesBibleTextAndRecentPosts.recentPostsContainer}
+            >
+              <UserPost />
+              <UserPost />
+              <UserPost />
+            </SafeAreaView>
+          </SafeAreaView>
+        </ScrollView>
+
+        {/* GPT icons */}
+        {selectedVerses.length === 0 && (
+          <SafeAreaView style={stylesGPTIcons.iconContainer}>
+            <TouchableOpacity>
+              {/* Todo opens model on touch https://gorhom.github.io/react-native-bottom-sheet/modal/ */}
+              <Image
+                source={require("../assets/icons/stars.png")}
+                style={stylesGPTIcons.icon}
+              />
+            </TouchableOpacity>
+          </SafeAreaView>
+        )}
       </SafeAreaView>
-
-      {/* Bible Text and recent posts */}
-      <ScrollView contentContainerStyle={{ paddingBottom: bottomPadding }}>
-        <SafeAreaView style={stylesBibleTextAndRecentPosts.container}>
-          {/* Text */}
-          <SafeAreaView style={stylesBibleTextAndRecentPosts.bibleTextContainer}>
-            <VerseComponent key={1} number={0 + 1} verse={"Hehehe hi"} onVerseSelect={handleVerseSelection} isSelected={selectedVerses.includes(1)} />
-            <VerseComponent key={2} number={0 + 2} verse={"woah woah woah"} onVerseSelect={handleVerseSelection} isSelected={selectedVerses.includes(2)} />
-            <Text style={stylesBibleTextAndRecentPosts.bibleText}>{text}</Text>
-          </SafeAreaView>
-          {/* Recent Posts */}
-          <SafeAreaView
-            style={stylesBibleTextAndRecentPosts.recentPostsContainer}
-          >
-            <UserPost />
-            <UserPost />
-            <UserPost />
-          </SafeAreaView>
-        </SafeAreaView>
-      </ScrollView>
-
-      {/* GPT icons */}
-      {selectedVerses.length === 0 && (
-        <SafeAreaView style={stylesGPTIcons.iconContainer}>
-          <TouchableOpacity>
-            {/* Todo opens model on touch https://gorhom.github.io/react-native-bottom-sheet/modal/ */}
-            <Image
-              source={require("../assets/icons/stars.png")}
-              style={stylesGPTIcons.icon}
-            />
-          </TouchableOpacity>
-        </SafeAreaView>
-      )}
-    </SafeAreaView>
-    {/* Bottom Component */}
-    {selectedVerses.length > 0 && (
+      {/* Bottom Component */}
+      {selectedVerses.length > 0 && (
         <SafeAreaView style={stylesBottomScreenModal.bottomViewContainer}>
           <Text>Action for verses {selectedVerses.join(', ')}</Text>
           <Button title="Summarize" />
           <Button title="Context" />
           <Button title="Practical" />
+          <Button title="Note" />
+          <Button title="Highlight" />
+          <Button title="Bookmark" />
           <TouchableOpacity
             style={stylesBottomScreenModal.closeButton}
             onPress={() => setSelectedVerses([])}
@@ -236,7 +242,7 @@ const stylesBottomScreenModal = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
-    flexWrap:  'wrap',
+    flexWrap: 'wrap',
 
     borderRadius: 15,
 
