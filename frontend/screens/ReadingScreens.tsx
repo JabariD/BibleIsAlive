@@ -15,10 +15,12 @@ import {
   TouchableOpacity,
   TextInput,
   Button,
+  KeyboardAvoidingView, Platform
 } from "react-native";
 
 import Modal from 'react-native-modal';
 import { Picker } from '@react-native-picker/picker';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 // Components
 import VerseComponent from "../components/VerseComponent";
@@ -77,6 +79,12 @@ const ReadingScreen: React.FC<Props> = () => {
   // verses state is used to store the verses to display on Bible Screen.
   const [verses, setVerses] = useState<string[]>([]);
 
+  const [noteName, setNoteName] = useState('');
+  const [noteContent, setNoteContent] = useState('');
+  const [noteTags, setNoteTags] = useState('');
+
+  const [currentAction, setCurrentAction] = useState<string | null>(null);
+
   // Function to handle verse selection
   const handleVerseSelection = (selectedVerseNumber: number, selectedVerseContent: string) => {
     // Update the selected verses state
@@ -106,7 +114,7 @@ const ReadingScreen: React.FC<Props> = () => {
   const handleBookChange = (book: string) => {
     setTempSelectedBook(book);
     // Reset chapter selection when book changes
-    setTempSelectedChapter(1); 
+    setTempSelectedChapter(1);
   };
 
   // Function to handle the change of the selected chapter in the Bible Picker Modal
@@ -134,6 +142,11 @@ const ReadingScreen: React.FC<Props> = () => {
     toggleModal();
   };
 
+  // TODO: Save the note to a database.
+  const handleConfirmNote = () => {
+    // Here you can handle the note confirmation, e.g. save the note to a database
+  };
+
   // Separate renderings
   const renderBiblePickerModal = () => {
     return (
@@ -159,6 +172,38 @@ const ReadingScreen: React.FC<Props> = () => {
         </View>
       </Modal>
     );
+  };
+
+  const actionComponents: Record<string, JSX.Element> = {
+    'Note': (
+      <KeyboardAwareScrollView style={stylesActionComponents.container}>
+        <Text style={stylesActionComponents.title}>Add a Note</Text>
+        <TextInput
+          style={stylesActionComponents.input}
+          placeholder="Note Name"
+          value={noteName}
+          onChangeText={setNoteName}
+        />
+        <TextInput
+          style={[stylesActionComponents.input, { height: 150 }]}
+          placeholder="Note Content"
+          value={noteContent}
+          onChangeText={setNoteContent}
+          multiline
+        />
+        <TextInput
+          style={stylesActionComponents.input}
+          placeholder="Tags"
+          value={noteTags}
+          onChangeText={setNoteTags}
+        />
+        <View style={stylesActionComponents.buttonContainer}>
+          <Button title="Save" onPress={handleConfirmNote} color="#2196F3" />
+          <Button title="Back" onPress={() => setCurrentAction(null)} color="#2196F3" />
+        </View>
+      </KeyboardAwareScrollView>
+    ),
+    // TODO: Add other actions here...
   };
 
 
@@ -234,18 +279,24 @@ const ReadingScreen: React.FC<Props> = () => {
       {selectedVerses.length > 0 && (
         <SafeAreaView style={stylesBottomScreenModal.bottomViewContainer}>
           <Text>Action for verses {selectedVerses.join(', ')}</Text>
-          <Button title="Summarize" />
-          <Button title="Context" />
-          <Button title="Practical" />
-          <Button title="Note" />
-          <Button title="Highlight" />
-          <Button title="Bookmark" />
-          <TouchableOpacity
-            style={stylesBottomScreenModal.closeButton}
-            onPress={() => setSelectedVerses([])}
-          >
-            <Text style={stylesBottomScreenModal.textStyle}>Close</Text>
-          </TouchableOpacity>
+          {currentAction ? actionComponents[currentAction] : (
+            <>
+              <Button title="Summarize" onPress={() => setCurrentAction('Summarize')} />
+              <Button title="Context" onPress={() => setCurrentAction('Context')} />
+              <Button title="Practical" onPress={() => setCurrentAction('Practical')} />
+              <Button title="Note" onPress={() => setCurrentAction('Note')} />
+              <Button title="Highlight" onPress={() => setCurrentAction('Highlight')} />
+              <Button title="Bookmark" onPress={() => setCurrentAction('Bookmark')} />
+            </>
+          )}
+          {!currentAction && (
+            <TouchableOpacity
+              style={stylesBottomScreenModal.closeButton}
+              onPress={() => setSelectedVerses([])}
+            >
+              <Text style={stylesBottomScreenModal.textStyle}>Close</Text>
+            </TouchableOpacity>
+          )}
         </SafeAreaView>
       )}
     </>
@@ -375,6 +426,33 @@ const stylesBottomScreenModal = StyleSheet.create({
     color: "white",
     fontWeight: "bold",
     textAlign: "center",
+  },
+});
+
+const stylesActionComponents = StyleSheet.create({
+  container: {
+    padding: 30, // Increase padding
+    flex: 1,
+    backgroundColor: '#f8f8f8', // Add a light background color
+  },
+  title: {
+    fontSize: 24, // Increase font size
+    fontWeight: 'bold',
+    marginBottom: 30, // Increase margin
+    color: '#333', // Darker color for the text
+  },
+  input: {
+    borderColor: 'gray',
+    borderWidth: 1,
+    marginBottom: 20, // Increase margin
+    paddingLeft: 10,
+    height: 40, // Increase height
+    borderRadius: 5, // Add some border radius
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 40, // Increase margin
   },
 });
 
