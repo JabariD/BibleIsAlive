@@ -17,8 +17,14 @@ import {
   Button,
 } from "react-native";
 
+import Modal from 'react-native-modal';
+import { Picker } from '@react-native-picker/picker';
+
 // Components
 import VerseComponent from "../components/VerseComponent";
+
+// Bible API
+import { bibleBookToNumberOfChaptersMap } from "../apis/bible/directory";
 
 const text =
   "Then what is the advantage of the Jew? Or what is the benefit of circumcision? Great in every respect. To begin with, the Jews were entrusted with the oracles of God [His very words]. What then? If some did not believe or were unfaithful [to God], their lack of belief will not nullify and make invalid the faithfulness of God and His word, will it? Certainly not! Let God be found true [as He will be], though every person be found a liar, just as it is written [in Scripture], What then? Are we Jews any better off? No, not at all. For we have already charged that all, both Jews and Greeks, are under sin, as it is written:“None is righteous, no, not one;no one understands;no one seeks for God.All have turned aside; together they have become worthless;no one does good,not even one.”“Their throat is an open grave;they use their tongues to deceive.”“The venom of asps is under their lips.”“Their mouth is full of curses and bitterness.”“Their feet are swift to shed blood;in their paths are ruin and misery,and the way of peace they have not known.”“There is no fear of God before their eyes.”Now we know that whatever the law says it speaks to those who are under the law, so that every mouth may be stopped, and the whole world may be held accountable to God. For by works of the law no human being will be justified in his sight, since through the law comes knowledge of sin.";
@@ -49,6 +55,14 @@ const ReadingScreen: React.FC<Props> = () => {
   const [selectedVerses, setSelectedVerses] = useState<number[]>([]);
   // searchText state is used to store the text entered by the user in the search bar
   const [searchText, setSearchText] = useState('');
+  // isModalBiblePickerVisible state is used to control the visibility of the Bible Picker Modal
+  const [isModalBiblePickerVisible, setModalBiblePickerVisible] = useState(false);
+  const [tempSelectedBook, setTempSelectedBook] = useState('Genesis');
+  const [tempSelectedChapter, setTempSelectedChapter] = useState(1);
+  // selectedBook state is used to store the book selected by the user in the Bible Picker Modal
+  const [selectedBook, setSelectedBook] = useState('Genesis');
+  // selectedChapter state is used to store the chapter selected by the user in the Bible Picker Modal
+  const [selectedChapter, setSelectedChapter] = useState(1);
 
   // State Management
   // Function to handle verse selection
@@ -71,6 +85,56 @@ const ReadingScreen: React.FC<Props> = () => {
     // Perform additional processing...
   };
 
+  // Function to toggle the visibility of the Bible Picker Modal
+  const toggleModal = () => {
+    setModalBiblePickerVisible(!isModalBiblePickerVisible);
+  };
+
+  // Function to handle the change of the selected book in the Bible Picker Modal
+  const handleBookChange = (book: string) => {
+    setTempSelectedBook(book);
+    setTempSelectedChapter(1); // Reset chapter selection when book changes
+  };
+
+  // Function to handle the change of the selected chapter in the Bible Picker Modal
+  const handleChapterChange = (chapter: number) => {
+    setTempSelectedChapter(chapter);
+  };
+
+  const handleConfirmSelection = () => {
+    setSelectedBook(tempSelectedBook);
+    setSelectedChapter(tempSelectedChapter);
+    toggleModal();
+  };
+
+  // Separate renderings
+  const renderBiblePickerModal = () => {
+    return (
+      <Modal isVisible={isModalBiblePickerVisible} onBackdropPress={toggleModal}>
+        <View style={stylesBibleSelectionModal.modalContent}>
+          <Picker selectedValue={tempSelectedBook} onValueChange={handleBookChange}>
+            {Array.from(bibleBookToNumberOfChaptersMap.keys()).map((book) => (
+              <Picker.Item key={book} label={book} value={book} />
+            ))}
+          </Picker>
+          <Picker selectedValue={tempSelectedChapter} onValueChange={handleChapterChange}>
+            {/* 
+               Create an array with a length equal to the number of chapters in the currently selected book.
+               For each element in the array (representing a chapter), create a Picker.Item with a label and value equal to the chapter number (i + 1).
+               This allows the user to select a chapter from the currently selected book.
+            */}
+            {Array.from({ length: bibleBookToNumberOfChaptersMap.get(tempSelectedBook) || 0 }).map((_, i) => (
+              <Picker.Item key={i} label={String(i + 1)} value={i + 1} />
+            ))}
+          </Picker>
+          <Button title="Close" onPress={toggleModal} />
+          <Button title="Confirm" onPress={handleConfirmSelection} />
+        </View>
+      </Modal>
+    );
+  };
+
+
   // Dynamic styles.
   // Calculate bottom padding based on whether the modal is open or not
   const bottomPadding = selectedVerses.length > 0 ? 200 : 0; // Adjust the value based on the height of your modal
@@ -89,9 +153,14 @@ const ReadingScreen: React.FC<Props> = () => {
 
         {/* Header */}
         <SafeAreaView style={stylesHeader.bibleHeaderContainer}>
-          <Text style={stylesHeader.bibleHeaderText}>Rom 3</Text>
+          <TouchableOpacity onPress={toggleModal}>
+            <Text style={stylesHeader.bibleHeaderText}>{selectedBook} {selectedChapter}</Text>
+          </TouchableOpacity>
           <Text style={stylesHeader.bibleHeaderText}>ESV</Text>
         </SafeAreaView>
+
+        {/* Bible Picker Modal */}
+        {renderBiblePickerModal()}
 
         {/* Bible Text and recent posts */}
         <ScrollView contentContainerStyle={{ paddingBottom: bottomPadding }}>
@@ -185,6 +254,17 @@ const stylesHeader = StyleSheet.create({
   bibleHeaderText: {
     fontSize: 20,
     fontWeight: "bold",
+  },
+});
+
+const stylesBibleSelectionModal = StyleSheet.create({
+  modalContent: {
+    backgroundColor: 'white',
+    padding: 22,
+    justifyContent: 'space-around', // Distribute space evenly
+    alignItems: 'stretch', // Stretch items to fill the space
+    borderRadius: 4,
+    borderColor: 'rgba(0, 0, 0, 0.1)',
   },
 });
 
