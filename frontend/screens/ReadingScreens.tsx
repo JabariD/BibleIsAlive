@@ -49,6 +49,8 @@ const UserPost: React.FC<UserPostProps> = () => {
   );
 };
 
+
+// TODO: Add some type of caching to avoid repeated calls to API. e.g. cache the results, check if data has changed.
 export type Props = {};
 const ReadingScreen: React.FC<Props> = () => {
   // On first render.
