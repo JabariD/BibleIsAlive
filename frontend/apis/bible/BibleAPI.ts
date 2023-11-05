@@ -35,6 +35,23 @@ class BibleAPI {
         }
     }
 
+    /**
+     * Fetch all verses from a specific chapter of a book.
+     * 
+     * Example: If book is "John" and chapter is 3,
+     *          then the url becomes "https://bible-api.com/John+3".
+     */
+    static async getChapterVerses(book: string, chapter: number): Promise<any> {
+        try {
+            const url = `${this.BASE_URL}/${book}+${chapter}`;
+
+            return await this.fetchData(url);
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
+
     // Returns the JSON data from the given url. If HTTP error, throws.
     private static async fetchData(url: string): Promise<any> {
         try {
