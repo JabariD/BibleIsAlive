@@ -24,6 +24,7 @@ import { Picker } from '@react-native-picker/picker';
 import VerseComponent from "../components/VerseComponent";
 
 // Bible API
+import BibleAPI from "../apis/bible/BibleAPI";
 import { bibleBookToNumberOfChaptersMap } from "../apis/bible/directory";
 
 const text =
@@ -63,6 +64,8 @@ const ReadingScreen: React.FC<Props> = () => {
   const [selectedBook, setSelectedBook] = useState('Genesis');
   // selectedChapter state is used to store the chapter selected by the user in the Bible Picker Modal
   const [selectedChapter, setSelectedChapter] = useState(1);
+  // verses to display on Bible Screen.
+  const [verses, setVerses] = useState<string[]>([]);
 
   // State Management
   // Function to handle verse selection
@@ -101,9 +104,21 @@ const ReadingScreen: React.FC<Props> = () => {
     setTempSelectedChapter(chapter);
   };
 
+  const fetchVerses = async () => {
+    try {
+      const response = await BibleAPI.getChapterVerses(selectedBook, selectedChapter);
+      // Extract the 'text' property from each verse object in the 'verses' array
+      const versesText = response.verses.map((verse: any) => verse.text.trim());
+      setVerses(versesText);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const handleConfirmSelection = () => {
     setSelectedBook(tempSelectedBook);
     setSelectedChapter(tempSelectedChapter);
+    fetchVerses();
     toggleModal();
   };
 
@@ -167,10 +182,17 @@ const ReadingScreen: React.FC<Props> = () => {
           <SafeAreaView style={stylesBibleTextAndRecentPosts.container}>
             {/* Text */}
             <SafeAreaView style={stylesBibleTextAndRecentPosts.bibleTextContainer}>
-              {/* Note: This will be mapped, based on the verses retrieved. */}
-              <VerseComponent key={1} number={0 + 1} verse={"Hehehe hi"} onVerseSelect={() => handleVerseSelection(0 + 1, "Hehehe hi")} isSelected={selectedVerses.includes(1)} />
-              <VerseComponent key={2} number={0 + 2} verse={"woah woah woah"} onVerseSelect={() => handleVerseSelection(0 + 2, "woah woah woah")} isSelected={selectedVerses.includes(2)} />
-              <Text style={stylesBibleTextAndRecentPosts.bibleText}>{text}</Text>
+              <SafeAreaView style={stylesBibleTextAndRecentPosts.bibleTextContainer}>
+                {verses.map((verse, index) => (
+                  <VerseComponent
+                    key={index}
+                    number={index + 1}
+                    verse={verse}
+                    onVerseSelect={() => handleVerseSelection(index + 1, verse)}
+                    isSelected={selectedVerses.includes(index + 1)}
+                  />
+                ))}
+              </SafeAreaView>
             </SafeAreaView>
             {/* Recent Posts */}
             <SafeAreaView
