@@ -77,9 +77,13 @@ const ReadingScreen: React.FC<Props> = () => {
     });
   };
 
+  // Dynamic styles.
+  // Calculate bottom padding based on whether the modal is open or not
+  const bottomPadding = selectedVerses.length > 0 ? 200 : 0; // Adjust the value based on the height of your modal
+
   return (
     <>
-    <SafeAreaView style={stylesScreen.container}>
+    <SafeAreaView style={[stylesScreen.container, {paddingBottom: bottomPadding}]}>
       {/* Search Bar */}
       <TextInput
         style={stylesHeader.searchBar}
@@ -96,7 +100,7 @@ const ReadingScreen: React.FC<Props> = () => {
       </SafeAreaView>
 
       {/* Bible Text and recent posts */}
-      <ScrollView>
+      <ScrollView contentContainerStyle={{ paddingBottom: bottomPadding }}>
         <SafeAreaView style={stylesBibleTextAndRecentPosts.container}>
           {/* Text */}
           <SafeAreaView style={stylesBibleTextAndRecentPosts.bibleTextContainer}>
@@ -130,8 +134,11 @@ const ReadingScreen: React.FC<Props> = () => {
     </SafeAreaView>
     {/* Bottom Component */}
     {selectedVerses.length > 0 && (
-        <SafeAreaView style={stylesBottomScreenModal.bottomView}>
+        <SafeAreaView style={stylesBottomScreenModal.bottomViewContainer}>
           <Text>Action for verses {selectedVerses.join(', ')}</Text>
+          <Button title="Summarize" />
+          <Button title="Context" />
+          <Button title="Practical" />
           <TouchableOpacity
             style={stylesBottomScreenModal.closeButton}
             onPress={() => setSelectedVerses([])}
@@ -219,7 +226,8 @@ const stylesGPTIcons = StyleSheet.create({
 });
 
 const stylesBottomScreenModal = StyleSheet.create({
-  bottomView: {
+  bottomViewContainer: {
+    display: "flex",
     position: 'absolute',
     bottom: 0,
     width: '100%',
@@ -227,6 +235,8 @@ const stylesBottomScreenModal = StyleSheet.create({
     padding: 20,
     justifyContent: 'center',
     alignItems: 'center',
+    flexDirection: 'row',
+    flexWrap:  'wrap',
 
     borderRadius: 15,
 
