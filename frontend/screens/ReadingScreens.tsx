@@ -15,7 +15,6 @@ import {
   TouchableOpacity,
   TextInput,
   Button,
-  KeyboardAvoidingView, Platform
 } from "react-native";
 
 import Modal from 'react-native-modal';
@@ -174,6 +173,12 @@ const ReadingScreen: React.FC<Props> = () => {
     );
   };
 
+  // Function to render user posts
+  const renderUserPosts = (count: number) => {
+    // Create an array of UserPost components with a length equal to the count parameter
+    return Array.from({ length: count }, (_, i) => <UserPost key={i} />);
+  };
+
   const actionComponents: Record<string, JSX.Element> = {
     'Note': (
       <KeyboardAwareScrollView style={stylesActionComponents.container}>
@@ -255,9 +260,7 @@ const ReadingScreen: React.FC<Props> = () => {
             <SafeAreaView
               style={stylesBibleTextAndRecentPosts.recentPostsContainer}
             >
-              <UserPost />
-              <UserPost />
-              <UserPost />
+              {renderUserPosts(3)}
             </SafeAreaView>
           </SafeAreaView>
         </ScrollView>
