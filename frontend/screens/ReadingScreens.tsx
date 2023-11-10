@@ -4,7 +4,7 @@
  * It also includes a header and GPT icons.
  */
 
-import React, { useState, useEffect } from "react";
+import React, { useCallback, useRef, useState, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -17,9 +17,11 @@ import {
   Button,
 } from "react-native";
 
+// Custom Packages
 import Modal from 'react-native-modal';
 import { Picker } from '@react-native-picker/picker';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { BottomSheetModal, BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 
 // Components
 import VerseComponent from "../components/VerseComponent";
@@ -27,6 +29,7 @@ import VerseComponent from "../components/VerseComponent";
 // Bible API
 import BibleAPI from "../apis/bible/BibleAPI";
 import { bibleBookToNumberOfChaptersMap } from "../apis/bible/directory";
+
 
 const text =
   "Then what is the advantage of the Jew? Or what is the benefit of circumcision? Great in every respect. To begin with, the Jews were entrusted with the oracles of God [His very words]. What then? If some did not believe or were unfaithful [to God], their lack of belief will not nullify and make invalid the faithfulness of God and His word, will it? Certainly not! Let God be found true [as He will be], though every person be found a liar, just as it is written [in Scripture], What then? Are we Jews any better off? No, not at all. For we have already charged that all, both Jews and Greeks, are under sin, as it is written:“None is righteous, no, not one;no one understands;no one seeks for God.All have turned aside; together they have become worthless;no one does good,not even one.”“Their throat is an open grave;they use their tongues to deceive.”“The venom of asps is under their lips.”“Their mouth is full of curses and bitterness.”“Their feet are swift to shed blood;in their paths are ruin and misery,and the way of peace they have not known.”“There is no fear of God before their eyes.”Now we know that whatever the law says it speaks to those who are under the law, so that every mouth may be stopped, and the whole world may be held accountable to God. For by works of the law no human being will be justified in his sight, since through the law comes knowledge of sin.";
@@ -58,6 +61,11 @@ const ReadingScreen: React.FC<Props> = () => {
   useEffect(() => {
     fetchVerses();
   }, []);
+
+
+  // References
+  // ref for the bottom sheet modal
+  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
 
   // State
   // selectedVerses state is used to keep track of the verses selected by the user on tap
@@ -108,6 +116,25 @@ const ReadingScreen: React.FC<Props> = () => {
   const toggleModal = () => {
     setModalBiblePickerVisible(!isModalBiblePickerVisible);
   };
+
+  // function to open the bottom sheet modal
+  const openModal = useCallback(() => {
+    bottomSheetModalRef.current?.present();
+  }, []);
+
+  // function to close the bottom sheet modal
+  const closeModal = useCallback(() => {
+    bottomSheetModalRef.current?.dismiss();
+  }, []);
+
+  // 
+  useEffect(() => {
+    if (selectedVerses.length > 0) {
+      openModal();
+    } else {
+      closeModal();
+    }
+  }, [selectedVerses, openModal, closeModal]);
 
   // Function to handle the change of the selected book in the Bible Picker Modal
   const handleBookChange = (book: string) => {
@@ -218,90 +245,98 @@ const ReadingScreen: React.FC<Props> = () => {
 
   return (
     <>
-      <SafeAreaView style={[stylesScreen.container, { paddingBottom: bottomPadding }]}>
-        {/* Search Bar */}
-        <TextInput
-          style={stylesHeader.searchBar}
-          placeholder="Search for verse, topic, or subject."
-          value={searchText}
-          onChangeText={setSearchText}
-        />
+      <BottomSheetModalProvider>
+        <SafeAreaView style={[stylesScreen.container, { paddingBottom: bottomPadding }]}>
+          {/* Search Bar */}
+          <TextInput
+            style={stylesHeader.searchBar}
+            placeholder="Search for verse, topic, or subject."
+            value={searchText}
+            onChangeText={setSearchText}
+          />
 
+          {/* Header */}
+          <SafeAreaView style={stylesHeader.bibleHeaderContainer}>
+            <TouchableOpacity onPress={toggleModal}>
+              <Text style={stylesHeader.bibleHeaderText}>{selectedBook} {selectedChapter}</Text>
+            </TouchableOpacity>
+            <Text style={stylesHeader.bibleHeaderText}>ESV</Text>
+          </SafeAreaView>
 
-        {/* Header */}
-        <SafeAreaView style={stylesHeader.bibleHeaderContainer}>
-          <TouchableOpacity onPress={toggleModal}>
-            <Text style={stylesHeader.bibleHeaderText}>{selectedBook} {selectedChapter}</Text>
-          </TouchableOpacity>
-          <Text style={stylesHeader.bibleHeaderText}>ESV</Text>
-        </SafeAreaView>
+          {/* Bible Picker Modal */}
+          {renderBiblePickerModal()}
 
-        {/* Bible Picker Modal */}
-        {renderBiblePickerModal()}
-
-        {/* Bible Text and recent posts */}
-        <ScrollView contentContainerStyle={{ paddingBottom: bottomPadding }}>
-          <SafeAreaView style={stylesBibleTextAndRecentPosts.container}>
-            {/* Text */}
-            <SafeAreaView style={stylesBibleTextAndRecentPosts.bibleTextContainer}>
+          {/* Bible Text and recent posts */}
+          <ScrollView contentContainerStyle={{ paddingBottom: bottomPadding }}>
+            <SafeAreaView style={stylesBibleTextAndRecentPosts.container}>
+              {/* Text */}
               <SafeAreaView style={stylesBibleTextAndRecentPosts.bibleTextContainer}>
-                {verses.map((verse, index) => (
-                  <VerseComponent
-                    key={index}
-                    number={index + 1}
-                    verse={verse}
-                    onVerseSelect={() => handleVerseSelection(index + 1, verse)}
-                    isSelected={selectedVerses.includes(index + 1)}
-                  />
-                ))}
+                <SafeAreaView style={stylesBibleTextAndRecentPosts.bibleTextContainer}>
+                  {verses.map((verse, index) => (
+                    <VerseComponent
+                      key={index}
+                      number={index + 1}
+                      verse={verse}
+                      onVerseSelect={() => handleVerseSelection(index + 1, verse)}
+                      isSelected={selectedVerses.includes(index + 1)}
+                    />
+                  ))}
+                </SafeAreaView>
+              </SafeAreaView>
+              {/* Recent Posts */}
+              <SafeAreaView
+                style={stylesBibleTextAndRecentPosts.recentPostsContainer}
+              >
+                {renderUserPosts(3)}
               </SafeAreaView>
             </SafeAreaView>
-            {/* Recent Posts */}
-            <SafeAreaView
-              style={stylesBibleTextAndRecentPosts.recentPostsContainer}
-            >
-              {renderUserPosts(3)}
-            </SafeAreaView>
-          </SafeAreaView>
-        </ScrollView>
+          </ScrollView>
 
-        {/* GPT icons */}
-        {selectedVerses.length === 0 && (
-          <SafeAreaView style={stylesGPTIcons.iconContainer}>
-            <TouchableOpacity>
-              {/* Todo opens model on touch https://gorhom.github.io/react-native-bottom-sheet/modal/ */}
-              <Image
-                source={require("../assets/icons/stars.png")}
-                style={stylesGPTIcons.icon}
-              />
-            </TouchableOpacity>
-          </SafeAreaView>
-        )}
-      </SafeAreaView>
-      {/* Bottom Component */}
-      {selectedVerses.length > 0 && (
-        <SafeAreaView style={stylesBottomScreenModal.bottomViewContainer}>
-          <Text>Action for verses {selectedVerses.join(', ')}</Text>
-          {currentAction ? actionComponents[currentAction] : (
-            <>
-              <Button title="Summarize" onPress={() => setCurrentAction('Summarize')} />
-              <Button title="Context" onPress={() => setCurrentAction('Context')} />
-              <Button title="Practical" onPress={() => setCurrentAction('Practical')} />
-              <Button title="Note" onPress={() => setCurrentAction('Note')} />
-              <Button title="Highlight" onPress={() => setCurrentAction('Highlight')} />
-              <Button title="Bookmark" onPress={() => setCurrentAction('Bookmark')} />
-            </>
-          )}
-          {!currentAction && (
-            <TouchableOpacity
-              style={stylesBottomScreenModal.closeButton}
-              onPress={() => setSelectedVerses([])}
-            >
-              <Text style={stylesBottomScreenModal.textStyle}>Close</Text>
-            </TouchableOpacity>
+          {/* GPT icons */}
+          {selectedVerses.length === 0 && (
+            <SafeAreaView style={stylesGPTIcons.iconContainer}>
+              <TouchableOpacity>
+                {/* Todo opens model on touch https://gorhom.github.io/react-native-bottom-sheet/modal/ */}
+                <Image
+                  source={require("../assets/icons/stars.png")}
+                  style={stylesGPTIcons.icon}
+                />
+              </TouchableOpacity>
+            </SafeAreaView>
           )}
         </SafeAreaView>
-      )}
+        {/* Bottom Component */}
+        {
+          <BottomSheetModal
+            ref={bottomSheetModalRef}
+            index={0}
+            snapPoints={['25%', '80%']}
+            onDismiss={() => setSelectedVerses([])}
+          >
+            <SafeAreaView style={stylesBottomScreenModal.bottomViewContainer}>
+              <Text>Action for verses {selectedVerses.join(', ')}</Text>
+              {currentAction ? actionComponents[currentAction] : (
+                <>
+                  <Button title="Summarize" onPress={() => setCurrentAction('Summarize')} />
+                  <Button title="Context" onPress={() => setCurrentAction('Context')} />
+                  <Button title="Practical" onPress={() => setCurrentAction('Practical')} />
+                  <Button title="Note" onPress={() => setCurrentAction('Note')} />
+                  <Button title="Highlight" onPress={() => setCurrentAction('Highlight')} />
+                  <Button title="Bookmark" onPress={() => setCurrentAction('Bookmark')} />
+                </>
+              )}
+              {!currentAction && (
+                <TouchableOpacity
+                  style={stylesBottomScreenModal.closeButton}
+                  onPress={() => setSelectedVerses([])}
+                >
+                  <Text style={stylesBottomScreenModal.textStyle}>Close</Text>
+                </TouchableOpacity>
+              )}
+            </SafeAreaView>
+          </BottomSheetModal>
+        }
+      </BottomSheetModalProvider>
     </>
   );
 };
@@ -401,8 +436,6 @@ const stylesGPTIcons = StyleSheet.create({
 const stylesBottomScreenModal = StyleSheet.create({
   bottomViewContainer: {
     display: "flex",
-    position: 'absolute',
-    bottom: 0,
     width: '100%',
     backgroundColor: '#FFFFFF', // Change this to match your app's design
     padding: 20,
@@ -412,12 +445,6 @@ const stylesBottomScreenModal = StyleSheet.create({
     flexWrap: 'wrap',
 
     borderRadius: 15,
-
-    shadowColor: '#000', // Shadow color for iOS
-    shadowOffset: { width: 0, height: -2 }, // Shadow offset for iOS
-    shadowOpacity: 0.25, // Shadow opacity for iOS
-    shadowRadius: 4, // Shadow radius for iOS
-    elevation: 5, // Shadow for Android
   },
   closeButton: {
     backgroundColor: "#2196F3",
