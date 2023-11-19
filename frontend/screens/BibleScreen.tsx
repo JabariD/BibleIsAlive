@@ -120,7 +120,7 @@ const TrendingVerse: React.FC<TrendingVerseProps> = (props) => {
       <Text style={tw`text-md font-bold mb-1.5`}>
         Example Name
       </Text>
-      <Text style={tw`text-base text-gray-500 mb-2.5`}>
+      <Text style={tw`text-sm text-gray-500 mb-2.5`}>
         {props.verse}
       </Text>
     </SafeAreaView>
