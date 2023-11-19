@@ -23,6 +23,9 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
+// Tailwind
+import tw from 'twrnc';
+
 export type Props = {};
 
 /**
@@ -40,49 +43,44 @@ const BibleScreen: React.FC<Props> = () => {
 
   return (
     <ScrollView>
-      <SafeAreaView style={screenStyles.container}>
+      <SafeAreaView style={tw`m-5`}>
         {/* Continue Reading section*/}
-        <SafeAreaView style={continueReadingStyles.container}>
+        <SafeAreaView style={tw`flex-col mb-6`}>
           {/* Row */}
-          <SafeAreaView style={continueReadingStyles.header}>
-            <Text style={sharedStyles.text}>Continue Reading</Text>
-            <Text style={sharedStyles.subText}>Start fresh...</Text>
+          <SafeAreaView style={tw`flex-row justify-between items-center mb-4`}>
+            <Text style={tw`text-xl font-bold`}>Continue Reading</Text>
+            <Text style={tw`text-lg text-gray-500`}>Start fresh...</Text>
           </SafeAreaView>
 
           {/* Image */}
-          <TouchableOpacity onPress={navigateToReading}>
+          <TouchableOpacity onPress={navigateToReading} style={tw`mb-2`}>
             <Image
               source={require("../assets/images/cross.jpg")}
-              style={{
-                height: 200,
-                width: "100%",
-                borderRadius: 15,
-                marginBottom: 10,
-                resizeMode: "cover",
-              }}
+              style={tw`h-50 w-full rounded-lg`}
+              resizeMode="cover"
             />
           </TouchableOpacity>
 
           {/* Text */}
-          <Text style={continueReadingStyles.verseText}>
+          <Text style={tw`text-lg font-bold`}>
             Bible text. Love the lord your God...
           </Text>
           {/* Translation */}
-          <Text style={continueReadingStyles.verseTranslation}>
+          <Text style={tw`text-sm text-gray-500`}>
             The King James Bible
           </Text>
         </SafeAreaView>
 
         {/* Trending Verses section */}
-        <SafeAreaView style={trendingVersesStyles.container}>
+        <SafeAreaView style={tw`flex-col mb-2`}>
           {/* Header */}
-          <SafeAreaView style={trendingVersesStyles.header}>
-            <Text style={sharedStyles.text}>Trending Verses</Text>
-            <Text style={sharedStyles.subText}>See all</Text>
+          <SafeAreaView style={tw`flex-row justify-between items-center mb-4`}>
+            <Text style={tw`text-lg font-bold`}>Trending Verses</Text>
+            <Text style={tw`text-md text-gray-500`}>See all</Text>
           </SafeAreaView>
           {/* Map each verse this. */}
           <ScrollView horizontal={true}>
-            <SafeAreaView style={trendingVersesStyles.trendingVerseContainer}>
+            <SafeAreaView style={tw`flex-row gap-5`}>
               <TrendingVerse verse="Bible Verse 1" />
               <TrendingVerse verse="Bible Verse 2" />
               <TrendingVerse verse="Bible Verse 3" />
@@ -92,10 +90,10 @@ const BibleScreen: React.FC<Props> = () => {
         </SafeAreaView>
 
         {/* Recommended post*/}
-        <SafeAreaView style={recommendedPostStyle.container}>
-          <Text style={sharedStyles.text}>Posts You Might Find Interesting</Text>
-          <Text style={sharedStyles.subText}>John 3:16</Text>
-          <Text>context of verse?</Text>
+        <SafeAreaView style={tw`flex-col items-center mb-1`}>
+          <Text style={tw`text-xl font-bold`}>Posts You Might Find Interesting</Text>
+          <Text style={tw`text-lg text-gray-500`}>John 3:16</Text>
+          <Text style={tw`text-base`}>context of verse?</Text>
         </SafeAreaView>
 
         {/* Featured sermons from church */}
@@ -105,86 +103,6 @@ const BibleScreen: React.FC<Props> = () => {
   );
 };
 
-// Styles
-const screenStyles = StyleSheet.create({
-  container: {
-    margin: 20,
-  },
-});
-
-const sharedStyles = StyleSheet.create({
-  text: {
-    fontSize: 25,
-    fontWeight: "bold",
-    marginBottom: 10,
-  },
-
-  subText: {
-    fontSize: 18,
-    color: "grey",
-    marginBottom: 10,
-  },
-});
-
-const continueReadingStyles = StyleSheet.create({
-  container: {
-    display: "flex",
-    flexDirection: "column",
-    marginBottom: 30,
-  },
-
-  header: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 20,
-  },
-
-  verseText: {
-    fontSize: 18,
-    fontWeight: "bold",
-    marginBottom: 10,
-  },
-
-  verseTranslation: {
-    fontSize: 12,
-    marginBottom: 20,
-  },
-});
-
-const trendingVersesStyles = StyleSheet.create({
-  container: {
-    display: "flex",
-    flexDirection: "column",
-    marginBottom: 30,
-  },
-
-  header: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 20,
-  },
-
-  trendingVerseContainer: {
-    display: "flex",
-    flexDirection: "row",
-    gap: 20,
-  },
-});
-
-const recommendedPostStyle = StyleSheet.create({
-  container: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    gap: 10,
-    marginBottom: 30,
-  },
-});
-
 /**
  * Reusable Trending Verse component
  */
@@ -193,46 +111,20 @@ type TrendingVerseProps = {
 };
 const TrendingVerse: React.FC<TrendingVerseProps> = (props) => {
   return (
-    <SafeAreaView style={reusableTrendingVerseComponentStyles.container}>
+    <SafeAreaView style={tw`flex flex-col items-center mb-5`}>
       <Image
         source={require("../assets/images/trending-verse.jpg")}
-        style={{
-          height: 100,
-          width: 110,
-          borderRadius: 15,
-          marginBottom: 10,
-          resizeMode: "cover",
-        }}
+        style={tw`h-25 w-28 rounded-lg mb-2.5`}
+        resizeMode="cover"
       />
-      <Text style={reusableTrendingVerseComponentStyles.verseName}>
+      <Text style={tw`text-md font-bold mb-1.5`}>
         Example Name
       </Text>
-      <Text style={reusableTrendingVerseComponentStyles.verseText}>
+      <Text style={tw`text-base text-gray-500 mb-2.5`}>
         {props.verse}
       </Text>
     </SafeAreaView>
   );
 };
-
-const reusableTrendingVerseComponentStyles = StyleSheet.create({
-  container: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    marginBottom: 20,
-  },
-
-  verseName: {
-    fontSize: 16,
-    fontWeight: "bold",
-    marginBottom: 5,
-  },
-
-  verseText: {
-    fontSize: 14,
-    color: "grey",
-    marginBottom: 10,
-  },
-});
 
 export default BibleScreen;
