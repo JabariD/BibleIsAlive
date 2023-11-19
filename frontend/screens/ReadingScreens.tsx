@@ -26,6 +26,9 @@ import { BottomSheetModal, BottomSheetModalProvider } from '@gorhom/bottom-sheet
 // Components
 import VerseComponent from "../components/VerseComponent";
 
+// Tailwind
+import tw from 'twrnc';
+
 // Bible API
 import BibleAPI from "../apis/bible/BibleAPI";
 import { bibleBookToNumberOfChaptersMap } from "../apis/bible/directory";
@@ -249,18 +252,18 @@ const ReadingScreen: React.FC<Props> = () => {
         <SafeAreaView style={[stylesScreen.container, { paddingBottom: bottomPadding }]}>
           {/* Search Bar */}
           <TextInput
-            style={stylesHeader.searchBar}
-            placeholder="Search for verse, topic, or subject."
+            style={tw`p-2 mb-2 bg-white rounded-lg`}
+            placeholder="Search for verse, topic, or subject..."
             value={searchText}
             onChangeText={setSearchText}
           />
 
           {/* Header */}
-          <SafeAreaView style={stylesHeader.bibleHeaderContainer}>
+          <SafeAreaView style={tw`flex-row justify-between items-center p-4`}>
             <TouchableOpacity onPress={toggleModal}>
-              <Text style={stylesHeader.bibleHeaderText}>{selectedBook} {selectedChapter}</Text>
+              <Text style={tw`text-lg font-bold`}>{selectedBook} {selectedChapter}</Text>
             </TouchableOpacity>
-            <Text style={stylesHeader.bibleHeaderText}>ESV</Text>
+            <Text style={tw`text-lg font-bold`}>ESV</Text>
           </SafeAreaView>
 
           {/* Bible Picker Modal */}
