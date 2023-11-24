@@ -15,6 +15,7 @@ import {
   TouchableOpacity,
   TextInput,
   Button,
+  LayoutChangeEvent,
 } from "react-native";
 
 // Custom Packages
@@ -24,6 +25,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { BottomSheetModal, BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 
 // Components
+import ChatModal from '../components/ChatModal'; // Adjust the path as necessary
 import VerseComponent from "../components/VerseComponent";
 
 // Tailwind
@@ -88,6 +90,8 @@ const ReadingScreen: React.FC<Props> = () => {
   const [selectedChapter, setSelectedChapter] = useState(1);
   // verses state is used to store the verses to display on Bible Screen.
   const [verses, setVerses] = useState<string[]>([]);
+  // State for the chat modal visibility
+  const [isChatModalVisible, setChatModalVisible] = useState(false);
 
   const [noteName, setNoteName] = useState('');
   const [noteContent, setNoteContent] = useState('');
@@ -120,6 +124,11 @@ const ReadingScreen: React.FC<Props> = () => {
     setModalBiblePickerVisible(!isModalBiblePickerVisible);
   };
 
+  // Function to toggle the chat modal
+  const toggleChatModal = () => {
+    setChatModalVisible(!isChatModalVisible);
+  };
+
   // function to open the bottom sheet modal
   const openModal = useCallback(() => {
     bottomSheetModalRef.current?.present();
@@ -130,7 +139,7 @@ const ReadingScreen: React.FC<Props> = () => {
     bottomSheetModalRef.current?.dismiss();
   }, []);
 
-  // 
+  // useEffect to open or close the modal based on if there are selected verses
   useEffect(() => {
     if (selectedVerses.length > 0) {
       openModal();
@@ -138,6 +147,15 @@ const ReadingScreen: React.FC<Props> = () => {
       closeModal();
     }
   }, [selectedVerses, openModal, closeModal]);
+
+  // useEffect to call fetchVerses when selectedBook or selectedChapter changes
+  // This is to confirm we fetch the verses very time it changes.
+  useEffect(() => {
+    if (selectedBook && selectedChapter) {
+      fetchVerses();
+    }
+  }, [selectedBook, selectedChapter]);
+
 
   // Function to handle the change of the selected book in the Bible Picker Modal
   const handleBookChange = (book: string) => {
@@ -151,6 +169,18 @@ const ReadingScreen: React.FC<Props> = () => {
     setTempSelectedChapter(chapter);
   };
 
+  // Function to handle the confirmation of the selection in the Bible Picker Modal
+  const handleConfirmSelection = () => {
+    setSelectedBook(tempSelectedBook);
+    setSelectedChapter(tempSelectedChapter);
+    toggleModal();
+  };
+
+  // TODO: Save the note to a database.
+  const handleConfirmNote = () => {
+    // Here you can handle the note confirmation, e.g. save the note to a database
+  };
+
   // Function to fetch verses from the Bible API
   const fetchVerses = async () => {
     try {
@@ -161,19 +191,6 @@ const ReadingScreen: React.FC<Props> = () => {
     } catch (error) {
       console.error(error);
     }
-  };
-
-  // Function to handle the confirmation of the selection in the Bible Picker Modal
-  const handleConfirmSelection = () => {
-    setSelectedBook(tempSelectedBook);
-    setSelectedChapter(tempSelectedChapter);
-    fetchVerses();
-    toggleModal();
-  };
-
-  // TODO: Save the note to a database.
-  const handleConfirmNote = () => {
-    // Here you can handle the note confirmation, e.g. save the note to a database
   };
 
   // Separate renderings
@@ -269,40 +286,34 @@ const ReadingScreen: React.FC<Props> = () => {
           {/* Bible Picker Modal */}
           {renderBiblePickerModal()}
 
-          {/* Bible Text and recent posts */}
-          <ScrollView contentContainerStyle={{ paddingBottom: bottomPadding }}>
-            <SafeAreaView style={stylesBibleTextAndRecentPosts.container}>
+          <ChatModal isVisible={isChatModalVisible} onClose={toggleChatModal} />
+
+          {/* Bible Text */}
+          <ScrollView contentContainerStyle={tw`pb-${bottomPadding}`}>
+            <SafeAreaView style={tw`mt-7.5 flex-row justify-between`}>
               {/* Text */}
-              <SafeAreaView style={stylesBibleTextAndRecentPosts.bibleTextContainer}>
-                <SafeAreaView style={stylesBibleTextAndRecentPosts.bibleTextContainer}>
-                  {verses.map((verse, index) => (
-                    <VerseComponent
-                      key={index}
-                      number={index + 1}
-                      verse={verse}
-                      onVerseSelect={() => handleVerseSelection(index + 1, verse)}
-                      isSelected={selectedVerses.includes(index + 1)}
-                    />
-                  ))}
-                </SafeAreaView>
-              </SafeAreaView>
-              {/* Recent Posts */}
-              <SafeAreaView
-                style={stylesBibleTextAndRecentPosts.recentPostsContainer}
-              >
-                {renderUserPosts(3)}
+              <SafeAreaView style={tw`flex-row flex-wrap gap-2.5 w-4/5`}>
+                {verses.map((verse, index) => (
+                  <VerseComponent
+                    key={index}
+                    number={index + 1}
+                    verse={verse}
+                    onVerseSelect={() => handleVerseSelection(index + 1, verse)}
+                    isSelected={selectedVerses.includes(index + 1)}
+                  />
+                ))}
               </SafeAreaView>
             </SafeAreaView>
           </ScrollView>
 
           {/* GPT icons */}
           {selectedVerses.length === 0 && (
-            <SafeAreaView style={stylesGPTIcons.iconContainer}>
-              <TouchableOpacity>
+            <SafeAreaView style={tw`flex-row justify-center items-center`}>
+              <TouchableOpacity onPress={toggleChatModal}>
                 {/* Todo opens model on touch https://gorhom.github.io/react-native-bottom-sheet/modal/ */}
                 <Image
                   source={require("../assets/icons/stars.png")}
-                  style={stylesGPTIcons.icon}
+                  style={tw`absolute right-2.5 bottom-2.5 h-12.5 w-12.5`}
                 />
               </TouchableOpacity>
             </SafeAreaView>
@@ -316,27 +327,36 @@ const ReadingScreen: React.FC<Props> = () => {
             snapPoints={['25%', '80%']}
             onDismiss={() => setSelectedVerses([])}
           >
-            <SafeAreaView style={stylesBottomScreenModal.bottomViewContainer}>
-              <Text>Action for verses {selectedVerses.join(', ')}</Text>
-              {currentAction ? actionComponents[currentAction] : (
-                <>
-                  <Button title="Summarize" onPress={() => setCurrentAction('Summarize')} />
-                  <Button title="Context" onPress={() => setCurrentAction('Context')} />
-                  <Button title="Practical" onPress={() => setCurrentAction('Practical')} />
-                  <Button title="Note" onPress={() => setCurrentAction('Note')} />
-                  <Button title="Highlight" onPress={() => setCurrentAction('Highlight')} />
-                  <Button title="Bookmark" onPress={() => setCurrentAction('Bookmark')} />
-                </>
-              )}
+            <View style={tw`p-4 bg-white rounded-lg shadow`}>
+              <Text style={tw`text-xl font-semibold mb-4`}>Action for verses {selectedVerses.join(', ')}</Text>
+              <View style={tw`flex-row justify-around mb-4`}>
+                {currentAction ? (
+                  <>
+                    {actionComponents[currentAction]}
+                  </>
+                ) : (
+                  <>
+                    <TouchableOpacity style={tw`items-center justify-center p-2 bg-blue-500 rounded-md shadow`} onPress={() => setCurrentAction('Summarize')}>
+                      <Text style={tw`text-white font-medium`}>Summarize</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={tw`items-center justify-center p-2 bg-green-500 rounded-md shadow`} onPress={() => setCurrentAction('Context')}>
+                      <Text style={tw`text-white font-medium`}>Context</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={tw`items-center justify-center p-2 bg-purple-500 rounded-md shadow`} onPress={() => setCurrentAction('Practical')}>
+                      <Text style={tw`text-white font-medium`}>Practical</Text>
+                    </TouchableOpacity>
+                  </>
+                )}
+              </View>
               {!currentAction && (
                 <TouchableOpacity
-                  style={stylesBottomScreenModal.closeButton}
+                  style={tw`p-2 bg-gray-200 rounded-md shadow`}
                   onPress={() => setSelectedVerses([])}
                 >
-                  <Text style={stylesBottomScreenModal.textStyle}>Close</Text>
+                  <Text style={tw`text-center font-medium`}>Close</Text>
                 </TouchableOpacity>
               )}
-            </SafeAreaView>
+            </View>
           </BottomSheetModal>
         }
       </BottomSheetModalProvider>
@@ -360,29 +380,6 @@ const stylesScreen = StyleSheet.create({
   },
 });
 
-const stylesHeader = StyleSheet.create({
-  searchBar: {
-    height: 40,
-    borderRadius: 20,
-    borderWidth: 0.5,
-    padding: 5,
-    marginBottom: 10,
-    borderColor: "grey",
-    backgroundColor: '#f0f0f0',
-  },
-
-  bibleHeaderContainer: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-
-  bibleHeaderText: {
-    fontSize: 20,
-    fontWeight: "bold",
-  },
-});
-
 const stylesBibleSelectionModal = StyleSheet.create({
   modalContent: {
     backgroundColor: 'white',
@@ -391,74 +388,6 @@ const stylesBibleSelectionModal = StyleSheet.create({
     alignItems: 'stretch', // Stretch items to fill the space
     borderRadius: 4,
     borderColor: 'rgba(0, 0, 0, 0.1)',
-  },
-});
-
-const stylesBibleTextAndRecentPosts = StyleSheet.create({
-  container: {
-    marginTop: 30,
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-
-  bibleTextContainer: {
-    display: "flex",
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: 10,
-    width: "80%",
-  },
-
-  bibleText: {
-    fontSize: 20,
-    lineHeight: 30,
-  },
-
-  recentPostsContainer: {
-    display: "flex",
-    flexDirection: "column",
-    gap: 70,
-  },
-});
-
-const stylesGPTIcons = StyleSheet.create({
-  iconContainer: {
-    flex: 1, // ensure it takes up full height
-    justifyContent: 'flex-end', // align children to the bottom
-  },
-  icon: {
-    position: "absolute",
-    right: 10,
-    bottom: 10,
-    height: 50,
-    width: 50
-  },
-});
-
-const stylesBottomScreenModal = StyleSheet.create({
-  bottomViewContainer: {
-    display: "flex",
-    width: '100%',
-    backgroundColor: '#FFFFFF', // Change this to match your app's design
-    padding: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-
-    borderRadius: 15,
-  },
-  closeButton: {
-    backgroundColor: "#2196F3",
-    borderRadius: 20,
-    padding: 10,
-    marginTop: 10,
-  },
-  textStyle: {
-    color: "white",
-    fontWeight: "bold",
-    textAlign: "center",
   },
 });
 
