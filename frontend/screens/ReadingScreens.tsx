@@ -226,6 +226,45 @@ const ReadingScreen: React.FC<Props> = () => {
     return Array.from({ length: count }, (_, i) => <UserPost key={i} />);
   };
 
+  // Function to format selected verses into a string representation
+  const formatSelectedVerses = (selectedVerses: number[]): string => {
+    // Sort the selected verses in ascending order for proper range formatting
+    const sortedVerses = selectedVerses.sort((a, b) => a - b);
+
+    // Define the type for a range as an array of numbers representing continuous verses
+    type Range = number[];
+
+    // Define the type for the accumulator as an array of ranges
+    type Ranges = Range[];
+
+    // Reduce the sorted verses into an array of ranges (continuous verses)
+    const verseRanges = sortedVerses.reduce<Ranges>((ranges, verse, i) => {
+      // If it's the first verse, start a new range with it
+      if (i === 0) {
+        ranges.push([verse]);
+      } else {
+        // Get the last range and verse to compare with the current verse
+        const lastRange = ranges[ranges.length - 1];
+        const lastVerse = lastRange[lastRange.length - 1];
+        // If the current verse is consecutive, add it to the last range
+        if (verse === lastVerse + 1) {
+          lastRange.push(verse);
+        } else {
+          // If not consecutive, start a new range with the current verse
+          ranges.push([verse]);
+        }
+      }
+      // Return the updated ranges accumulator
+      return ranges;
+    }, []);
+
+    // Map the ranges to a string, formatting single verses and ranges differently
+    // Single verses show as is, ranges show as 'start-end'
+    return verseRanges.map(range =>
+      range.length === 1 ? range[0].toString() : `${range[0]}-${range[range.length - 1]}`
+    ).join(', ');
+  };
+
   const actionComponents: Record<string, JSX.Element> = {
     'Note': (
       <KeyboardAwareScrollView style={stylesActionComponents.container}>
@@ -328,7 +367,11 @@ const ReadingScreen: React.FC<Props> = () => {
             onDismiss={() => setSelectedVerses([])}
           >
             <View style={tw`p-4 bg-white rounded-lg shadow`}>
-              <Text style={tw`text-xl font-semibold mb-4`}>Action for verses {selectedVerses.join(', ')}</Text>
+              {/* Ensure selectedVerses is sorted in ascending order before display */}
+              {/* Format the display of selected verses, combining continuous verses into ranges */}
+              <Text style={tw`text-xl font-semibold mb-4`}>
+                {selectedBook} {selectedChapter}:{formatSelectedVerses(selectedVerses)}
+              </Text>
               <View style={tw`flex-row justify-around mb-4`}>
                 {currentAction ? (
                   <>
