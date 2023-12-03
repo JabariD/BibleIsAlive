@@ -15,6 +15,7 @@
  * The output of this file is the main App component that renders the NavigationContainer wrapping the stack navigator.
  */
 
+import { useEffect } from 'react';
 import { Image, StatusBar, Text } from "react-native";
 
 // React Native Navigation
@@ -40,6 +41,9 @@ import homeIcon from './assets/icons/home.png';
 import bibleIcon from './assets/icons/bible.png';
 import timelineIcon from './assets/icons/magnifying-glass.png';
 import chatIcon from './assets/icons/bubble-chat.png';
+
+// Fonts
+import * as Font from 'expo-font';
 
 const Tab = createBottomTabNavigator();
 
@@ -105,6 +109,19 @@ const TabNavigation = () => {
  */
 const Stack = createStackNavigator();
 export default function App() {
+  // Load fonts.
+  // Make sure fonts appear in `tailwind.config.js`
+  // Note: To use, you must use the "custom" version of tailwind.
+  useEffect(() => {
+    async function loadFont() {
+      await Font.loadAsync({
+        'Quicksand-Medium': require('./assets/fonts/Quicksand-Medium.ttf'),
+      });
+    }
+
+    loadFont();
+  }, []);
+
   return (
     <NavigationContainer>
       {/* Make StatusBar white. or set to auto? */}
