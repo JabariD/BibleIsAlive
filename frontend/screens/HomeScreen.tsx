@@ -18,6 +18,11 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
+
+// Tailwind
+import tw from 'twrnc';
+
+// Navigation
 import { useNavigation } from "@react-navigation/native";
 
 // Components
@@ -77,8 +82,8 @@ const HomeScreen: React.FC<Props> = () => {
   // Extracted function for Welcome Header
   const renderWelcomeHeader = () => (
     <SafeAreaView>
-      <Text style={styleWelcomeHeader.welcomeBack}>Welcome Back,</Text>
-      <Text style={styleWelcomeHeader.name}>Payton</Text>
+      <Text style={tw`text-xl mb-1`}>Welcome Back,</Text>
+      <Text style={tw`text-3xl font-bold mb-2.5`}>Payton</Text>
     </SafeAreaView>
   );
 
@@ -109,9 +114,9 @@ const HomeScreen: React.FC<Props> = () => {
   // Extracted function for Badges
   const renderBadges = () => (
     <SafeAreaView>
-      <Text style={styleBadges.header}>Badges</Text>
+      <Text style={tw`text-2xl font-bold mb-2.5`}>Badges</Text>
       {/* Rows and columns of badges in grid format. */}
-      <SafeAreaView style={styleBadges.badgeContainer}>
+      <SafeAreaView style={tw`flex flex-row gap-1.25 mt-2.5 mb-5`}>
         {fetchBadges().map((badge) => badge)}
       </SafeAreaView>
     </SafeAreaView>
@@ -185,30 +190,32 @@ const HomeScreen: React.FC<Props> = () => {
   // Returns the user's current badges.
   // Note: Hardcoded for now.
   const fetchBadges = () => {
+    const badgeImageStyles = tw`h-7.5 w-7.5`;
+
     // Get badges from backend.
     // Return badges.
     return [
       <Image
         key="a"
         source={require("../assets/badges/sword.png")}
-        style={styleBadges.badgeImage}
+        style={badgeImageStyles}
       />,
       <Image
         key="b"
         source={require("../assets/badges/sword.png")}
-        style={styleBadges.badgeImage}
+        style={badgeImageStyles}
       />,
       <Image
         key="c"
         source={require("../assets/badges/sword.png")}
-        style={styleBadges.badgeImage}
+        style={badgeImageStyles}
       />,
     ];
   };
 
   return (
     <ScrollView>
-      <SafeAreaView style={styleHomeScreen.container}>
+      <SafeAreaView style={tw`flex m-6 gap-5`}>
         {renderWelcomeHeader()}
         {renderLevel()}
         {renderQuickActions()}
@@ -222,25 +229,6 @@ const HomeScreen: React.FC<Props> = () => {
 };
 
 /** Styles */
-const styleHomeScreen = StyleSheet.create({
-  container: {
-    display: "flex",
-    margin: 25,
-    rowGap: 20,
-  },
-});
-
-const styleWelcomeHeader = StyleSheet.create({
-  welcomeBack: {
-    fontSize: 20,
-    marginBottom: 5,
-  },
-  name: {
-    fontSize: 40,
-    fontWeight: "bold",
-    marginBottom: 10,
-  },
-});
 
 const styleLevel = StyleSheet.create({
   container: {
@@ -331,27 +319,6 @@ const styleQuickActions = StyleSheet.create({
     color: "#fff",
     fontWeight: "bold",
     fontSize: 16, // Increase font size for more prominence
-  },
-});
-
-const styleBadges = StyleSheet.create({
-  badgeContainer: {
-    display: "flex",
-    flexDirection: "row",
-    columnGap: 5,
-    marginTop: 10,
-    marginBottom: 20,
-  },
-
-  header: {
-    fontSize: 25,
-    fontWeight: "bold",
-    marginBottom: 10,
-  },
-
-  badgeImage: {
-    height: 30,
-    width: 30,
   },
 });
 
