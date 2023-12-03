@@ -36,3 +36,6 @@ frontend/.env
 
 # typescript
 frontend/*.tsbuildinfo
+
+# Manual tests
+frontend/apis/ai/AIAPI.manual.test.ts
